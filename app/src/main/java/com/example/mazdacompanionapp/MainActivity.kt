@@ -1,77 +1,61 @@
 package com.example.mazdacompanionapp
-
-import android.app.Notification
-import android.bluetooth.BluetoothAdapter
+import android.content.Intent
 import android.os.Bundle
-import android.service.notification.NotificationListenerService
-import android.service.notification.StatusBarNotification
+import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.NotificationManagerCompat
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
 
-val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-
 class MainActivity : ComponentActivity() {
-    private val notificationListener = NotificationListener()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!isNotificationServiceEnabled()) {
+            requestNotificationPermission()
+        }
+
         setContent {
             MazdaCompanionAppTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column {
-                        Button(onClick = {
-                            val notificationCount = notificationListener.getNotificationCount()
-                            // Trigger sending of notification count here
-                        }) {
-                            Text("Send Notification Count")
-                        }
-                    }
+                Surface(color = MaterialTheme.colors.background) {
+                    NotificationCount()
                 }
             }
         }
     }
-}
 
-class NotificationListener : NotificationListenerService() {
-    private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-    private var notificationCount = 0
-
-    override fun onNotificationPosted(sbn: StatusBarNotification) {
-        super.onNotificationPosted(sbn)
-        notificationCount++
+    private fun isNotificationServiceEnabled(): Boolean {
+        val packageNames = NotificationManagerCompat.getEnabledListenerPackages(this)
+        return packageNames.contains(packageName)
     }
 
-    fun getNotificationCount(): Int {
-        return notificationCount
+    private fun requestNotificationPermission() {
+        Toast.makeText(this, "Please grant notification access", Toast.LENGTH_LONG).show()
+        val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+        startActivity(intent)
     }
 }
 
-    @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-    }
+@Composable
+fun NotificationCount() {
+    val notificationCount = NotificationListener.notificationsLiveData.observeAsState(0)
+    Text(
+        text = "Počet notifikácií: ${notificationCount.value}",
+        style = MaterialTheme.typography.h4
+    )
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun GreetingPreview() {
-        MazdaCompanionAppTheme {
-            Greeting("Android")
-        }
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MazdaCompanionAppTheme {
+        NotificationCount()
     }
+}
