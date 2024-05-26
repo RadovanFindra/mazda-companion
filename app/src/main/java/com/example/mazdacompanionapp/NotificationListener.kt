@@ -17,31 +17,32 @@ class NotificationListener : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
+        // Získanie existujúcich notifikácií pri pripojení služby
         fetchExistingNotifications()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        val notificationData = extractNotificationData(sbn)
-        notifications.add(notificationData)
-        notificationsLiveData.postValue(notifications.toList())
+        refreshNotificationList()
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        val notificationData = extractNotificationData(sbn)
-        notifications.remove(notificationData)
-        notificationsLiveData.postValue(notifications.toList())
+        refreshNotificationList()
     }
+
     private fun fetchExistingNotifications() {
         val activeNotifications = activeNotifications
-        val existingNotifications = mutableListOf<NotificationData>()
+        val newNotifications = mutableListOf<NotificationData>()
 
         for (notification in activeNotifications) {
             val notificationData = extractNotificationData(notification)
-            existingNotifications.add(notificationData)
+            newNotifications.add(notificationData)
         }
 
-        notifications.addAll(existingNotifications)
-        notificationsLiveData.postValue(notifications.toList())
+        notificationsLiveData.postValue(newNotifications.toList())
+    }
+
+    private fun refreshNotificationList() {
+        fetchExistingNotifications()
     }
 
     private fun extractNotificationData(sbn: StatusBarNotification): NotificationData {
@@ -64,8 +65,8 @@ class NotificationListener : NotificationListenerService() {
     }
 
     companion object {
-        val notifications: MutableList<NotificationData> = mutableListOf()
         val notificationsLiveData: MutableLiveData<List<NotificationData>> = MutableLiveData()
     }
 }
+
 
