@@ -1,4 +1,7 @@
 package com.example.mazdacompanionapp
+
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -14,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.NotificationManagerCompat
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +25,12 @@ class MainActivity : ComponentActivity() {
         if (!isNotificationServiceEnabled()) {
             requestNotificationPermission()
         }
+        // Získať existujúce notifikácie pri spustení aplikácie
+        val existingNotifications = getExistingNotifications(this)
+        // Aktualizovať zoznam notifikácií vo vašej aplikácii
+        NotificationListener.notifications.addAll(existingNotifications)
+        // Aktualizovať UI
+        updateUI()
 
         setContent {
             MazdaCompanionAppTheme {
@@ -29,6 +39,19 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    private fun updateUI() {
+        // Aktualizácia UI na zobrazenie notifikácií
+    }
+    private fun getExistingNotifications(context: Context): List<String> {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val activeNotifications = notificationManager.activeNotifications
+        val existingNotifications = mutableListOf<String>()
+        for (notification in activeNotifications) {
+            val notificationText = notification.notification.extras.getCharSequence("android.text")?.toString()
+            notificationText?.let { existingNotifications.add(it) }
+        }
+        return existingNotifications
     }
 
     private fun isNotificationServiceEnabled(): Boolean {
