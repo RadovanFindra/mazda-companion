@@ -1,6 +1,5 @@
 package com.example.mazdacompanionapp
 
-import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,14 +17,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
+import java.text.SimpleDateFormat
 import java.util.*
 
-
 @Composable
-fun MainScreen(onNotificationButtonClick: () -> Unit, onDeviceClick: (BluetoothDeviceItem) -> Unit) {
+fun MainScreen(
+    onNotificationButtonClick: () -> Unit,
+    onDeviceClick: (BluetoothDeviceItem) -> Unit,
+    discoveredDevices: List<BluetoothDeviceItem>
+) {
     var selectedDevice by remember { mutableStateOf<BluetoothDeviceItem?>(null) }
     if (selectedDevice == null) {
-        DeviceList(onDeviceSelected = { selectedDevice = it })
+        DeviceList(onDeviceSelected = { selectedDevice = it }, discoveredDevices = discoveredDevices)
     } else {
         onDeviceClick(selectedDevice!!)
         Column {
@@ -41,7 +45,7 @@ fun MainScreen(onNotificationButtonClick: () -> Unit, onDeviceClick: (BluetoothD
 }
 
 @Composable
-fun DeviceList(onDeviceSelected: (BluetoothDeviceItem) -> Unit) {
+fun DeviceList(onDeviceSelected: (BluetoothDeviceItem) -> Unit, discoveredDevices: List<BluetoothDeviceItem>) {
     LazyColumn {
         items(discoveredDevices) { device ->
             DeviceItem(device = device, onClick = { onDeviceSelected(device) })

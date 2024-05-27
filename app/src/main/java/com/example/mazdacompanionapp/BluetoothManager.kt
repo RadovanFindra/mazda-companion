@@ -14,8 +14,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.mutableStateListOf
 import androidx.core.content.ContextCompat
-import java.util.UUID
 
 class MyBluetoothManager(private val activity: ComponentActivity, private val bluetoothService: BluetoothService) {
 
@@ -24,6 +24,8 @@ class MyBluetoothManager(private val activity: ComponentActivity, private val bl
     }
 
     private lateinit var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>
+    private val _discoveredDevices = mutableStateListOf<BluetoothDeviceItem>()
+    val discoveredDevices: List<BluetoothDeviceItem> get() = _discoveredDevices
 
     fun initialize() {
         requestPermissionsLauncher = activity.registerForActivityResult(

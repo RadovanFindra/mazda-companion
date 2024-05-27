@@ -5,11 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.mutableStateListOf
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
 
-val _discoveredDevices = mutableStateListOf<BluetoothDeviceItem>()
-val discoveredDevices: List<BluetoothDeviceItem> get() = _discoveredDevices
 class MainActivity : ComponentActivity() {
 
     private val bluetoothService = BluetoothService()
@@ -26,7 +23,8 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     MainScreen(
                         onNotificationButtonClick = { sendNotificationData() },
-                        onDeviceClick = { bluetoothManager.connectToDevice(it) }
+                        onDeviceClick = { bluetoothManager.connectToDevice(it) },
+                        discoveredDevices = bluetoothManager.discoveredDevices
                     )
                 }
             }
@@ -38,12 +36,9 @@ class MainActivity : ComponentActivity() {
         bluetoothManager.unregisterReceiver()
     }
 
-    private fun sendNotificationData() {
+    fun sendNotificationData() {
         val json = NotificationListener.notificationsToJson()
         bluetoothService.sendData(json)
     }
+
 }
-
-
-
-
