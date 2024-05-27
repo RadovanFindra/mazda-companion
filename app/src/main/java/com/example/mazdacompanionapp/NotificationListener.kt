@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.lifecycle.MutableLiveData
+import org.json.JSONArray
+import org.json.JSONObject
 
 
 data class NotificationData(
@@ -43,6 +45,7 @@ class NotificationListener : NotificationListenerService() {
 
     private fun refreshNotificationList() {
         fetchExistingNotifications()
+
     }
 
     private fun extractNotificationData(sbn: StatusBarNotification): NotificationData {
@@ -71,8 +74,32 @@ class NotificationListener : NotificationListenerService() {
         }
     }
 
+
     companion object {
         val notificationsLiveData: MutableLiveData<List<NotificationData>> = MutableLiveData()
+        fun notificationsToJson(): JSONObject {
+            val jsonArray = JSONArray()
+
+            for (notification in notificationsLiveData.value!!) {
+                notification?.let {
+                    val appName = it.appName
+                    val title = it.title
+                    val text = it.text
+
+                    val jsonObject = JSONObject().apply {
+                        put("appName", appName)
+                        put("title", title)
+                        put("text", text)
+                    }
+
+                    jsonArray.put(jsonObject)
+                }
+            }
+
+            return JSONObject().apply {
+                put("notifications", jsonArray)
+            }
+        }
     }
 }
 

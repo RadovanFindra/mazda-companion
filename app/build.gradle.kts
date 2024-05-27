@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
+
 android {
     namespace = "com.example.mazdacompanionapp"
     compileSdk = 34
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidbrowserhelper)
+    implementation(libs.androidx.appcompat)
     implementation("androidx.compose.ui:ui:1.2.0")
     implementation("androidx.compose.material:material:1.2.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.0")
@@ -74,5 +76,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 
 }
