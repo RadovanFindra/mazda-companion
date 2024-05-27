@@ -1,23 +1,23 @@
 package com.example.mazdacompanionapp
 
+import android.app.Notification
+import android.content.pm.PackageManager
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.lifecycle.MutableLiveData
 
+
 data class NotificationData(
+    val appName: String?,
     val title: String?,
     val text: String?,
-    val timestamp: Long,
-    val packageName: String,
-    val icon: Int,
-    val notificationId: Int
+    val timestamp: Long
 )
 
 class NotificationListener : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        // Získanie existujúcich notifikácií pri pripojení služby
         fetchExistingNotifications()
     }
 
@@ -47,26 +47,34 @@ class NotificationListener : NotificationListenerService() {
 
     private fun extractNotificationData(sbn: StatusBarNotification): NotificationData {
         val notification = sbn.notification
-        val title = notification.extras.getString("android.title")
-        val text = notification.extras.getCharSequence("android.text")?.toString()
-        val timestamp = sbn.postTime
         val packageName = sbn.packageName
-        val icon = notification.icon
-        val notificationId = sbn.id
+        val appName = getAppName(packageName)
+        val title = notification.extras.getString(Notification.EXTRA_TITLE)
+        val text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
+        val timestamp = sbn.postTime
 
         return NotificationData(
+            appName = appName,
             title = title,
             text = text,
-            timestamp = timestamp,
-            packageName = packageName,
-            icon = icon,
-            notificationId = notificationId
+            timestamp = timestamp
         )
+    }
+
+    private fun getAppName(packageName: String): String? {
+        val packageManager = applicationContext.packageManager
+        return try {
+            val applicationInfo = packageManager.getApplicationInfo(packageName, 0)
+            packageManager.getApplicationLabel(applicationInfo).toString()
+        } catch (e: PackageManager.NameNotFoundException) {
+            packageName
+        }
     }
 
     companion object {
         val notificationsLiveData: MutableLiveData<List<NotificationData>> = MutableLiveData()
     }
 }
+
 
 
