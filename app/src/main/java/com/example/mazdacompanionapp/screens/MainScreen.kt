@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,9 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
+import com.example.mazdacompanionapp.BluetoothDeviceItem
+import com.example.mazdacompanionapp.NotificationData
+import com.example.mazdacompanionapp.NotificationListener
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun MainScreen(

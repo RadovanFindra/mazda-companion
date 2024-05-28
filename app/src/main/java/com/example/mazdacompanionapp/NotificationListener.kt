@@ -46,6 +46,7 @@ class NotificationListener : NotificationListenerService() {
         fetchExistingNotifications()
     }
 
+
     private fun extractNotificationData(sbn: StatusBarNotification): NotificationData {
         val notification = sbn.notification
         val packageName = sbn.packageName
