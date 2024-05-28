@@ -12,7 +12,7 @@ interface EventsRepository {
     /**
      * Retrieve an event from the given data source that matches with the [id].
      */
-    fun getEventStream(id: Int): Flow<Event?>
+    fun getEventStream(): Flow<List<Event>>
 
     /**
      * Insert event in the data source

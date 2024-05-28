@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
 }
 
 
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.mazdacompanionapp"
-        minSdk = 29
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -71,6 +72,7 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:2.4.0-alpha10")
     implementation ("androidx.room:room-runtime:2.4.2")
     implementation ("androidx.room:room-ktx:2.4.2")
+    ksp("androidx.room:room-compiler:2.4.2}")
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
