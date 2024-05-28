@@ -1,12 +1,21 @@
 package com.example.mazdacompanionapp.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -24,44 +33,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.Event
+import com.example.mazdacompanionapp.EventTopAppBar
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.navigation.NavigationDestination
-import androidx.compose.foundation.lazy.LazyColumn
 
 object HomeDestination : NavigationDestination {
     override val route = "home"
     override val titleRes = R.string.app_name
-}
-
-@Composable
-fun CompanionApp(
-    navController: NavHostController = rememberNavController(),
-) {
-    NavHost(
-        navController = navController,
-        startDestination = "mainEventScreen"
-    ) {
-        composable("mainEventScreen") {
-//            HomeScreen(
-//                onAddEventClick = {
-//                    navController.navigate("addEventScreen")
-//                }
-//            )
-        }
-        composable("addEventScreen") {
-//            AddEventScreen(
-//                onBackClick = {
-//                    navController.popBackStack()
-//                }
-//            )
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,7 +93,7 @@ fun HomeBody(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
-        if (itemList.isEmpty()) {
+        if (eventsList.isEmpty()) {
             Text(
                 text = stringResource(R.string.no_event_description),
                 textAlign = TextAlign.Center,
@@ -123,9 +103,9 @@ fun HomeBody(
         } else {
             EventList(
                 eventsList = eventsList,
-                onItemClick = onItemClick,
+                onItemClick = { onItemClick(it.id) },
                 contentPadding = contentPadding,
-                modifier = Modifier.padding(horizontal =  dimensionResource(id = R.dimen.default_padding))
+                modifier = Modifier.padding(horizontal =  dimensionResource(id = R.dimen.padding_8))
             )
         }
     }
@@ -134,7 +114,7 @@ fun HomeBody(
 @Composable
 fun EventList(
     eventsList: List<Event>,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (Event) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
@@ -143,9 +123,40 @@ fun EventList(
         contentPadding = contentPadding
     ) {
         items(items = eventsList, key = { it.id }) { event ->
-            EventItem(event = event,
-                onItemClick = onItemClick
+            EvenetItem(event = event,
+                modifier = Modifier
+                    .padding(dimensionResource(id = R.dimen.padding_8))
+                    .clickable { onItemClick(event) })
+
+        }
+    }
+}
+
+@Composable
+fun EvenetItem(
+    event: Event,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier, elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+    Column (
+        modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_20)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_8))
+    ){
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = event.name,
+                style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+            )
+            Spacer(Modifier.weight(1f))
+            Text(
+                text = event.preset.name,
+                style = androidx.compose.material3.MaterialTheme.typography.titleMedium
             )
         }
+    }
     }
 }

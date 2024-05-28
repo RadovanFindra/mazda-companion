@@ -2,5 +2,12 @@
     <string name="app_name">Mazda companion app</string>
     <string name="event_entry_title">Add Item</string>
     <string name="no_event_description">Oops!\nNo events.\nTap + to add.</string>
+    <string name="back_button">Back</string>
+    <string name="event_add_title">Add Event</string>
+    <string name="save_action">Save</string>
+    <string name="event_name_req">Event Name*</string>
+    <string name="send_event_req">Send Event*</string>
+
+
 
 </resources>
