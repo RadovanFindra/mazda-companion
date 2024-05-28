@@ -3,11 +3,9 @@ package com.example.mazdacompanionapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +13,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
 
@@ -22,7 +25,6 @@ class MainActivity : ComponentActivity() {
     private var selectedPreset by mutableStateOf<Preset?>(null)
     private val bluetoothService = BluetoothService()
     private lateinit var bluetoothManager: MyBluetoothManager
-    private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +37,13 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController, startDestination = Screens.MainScreen.route) {
                         composable(Screens.MainScreen.route) {
-                            val viewModel: MainViewModel = viewModel
-                            val presets by viewModel.presets.observeAsState(emptyList())
-                            val selectedPreset by viewModel.selectedPreset.observeAsState(null)
-                            val notifications by viewModel.notifications.observeAsState(emptyList())
                             MainEventScreen(
                                 onAddEventClick = { navController.navigate(Screens.AddEventScreen.route) },
                                 events = events,
                                 onEventClick = { /* handle event click if needed */ }
-                            ) }
-                            composable(Screens.AddEventScreen.route) {
+                            )
+                        }
+                        composable(Screens.AddEventScreen.route) {
                             AddNewEventScreen(
                                 onSaveEvent = {
                                     events.add(it)
@@ -69,6 +68,21 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         bluetoothManager.unregisterReceiver()
+    }
+
+    private fun sendNotificationData() {
+        val json = NotificationListener.notificationsToJson()
+        bluetoothService.sendData(json)
+    }
+
+    private fun startPeriodicDataSend() {
+        CoroutineScope(Dispatchers.IO).launch {
+            while (true) {
+                delay(60000) // 1 minute
+                val data = JSONObject().put("preset", "default").put("timestamp", System.currentTimeMillis())
+                bluetoothService.sendData(data)
+            }
+        }
     }
 }
 

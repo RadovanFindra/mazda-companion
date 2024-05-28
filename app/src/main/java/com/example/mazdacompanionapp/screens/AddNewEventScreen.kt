@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 fun AddNewEventScreen(onSaveEvent: (Event) -> Unit, onPresetClick: () -> Unit, selectedPreset: Preset?) {
     var name by remember { mutableStateOf("") }
     var sendEvent by remember { mutableStateOf("") }
+    var isEnabled by remember { mutableStateOf(true) }
 
     Column(modifier = Modifier.padding(16.dp)) {
         TextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
@@ -25,7 +26,7 @@ fun AddNewEventScreen(onSaveEvent: (Event) -> Unit, onPresetClick: () -> Unit, s
             Text(text = "Select Preset")
         }
         Text(text = selectedPreset?.name ?: "No preset selected")
-        Button(onClick = { onSaveEvent(Event(name, selectedPreset ?: Preset.DEFAULT, sendEvent)) }) {
+        Button(onClick = { onSaveEvent(Event(name, selectedPreset ?: Preset.DEFAULT, sendEvent, isEnabled)) }) {
             Text(text = "Save Event")
         }
     }

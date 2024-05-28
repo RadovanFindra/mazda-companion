@@ -48,9 +48,13 @@ class MyBluetoothManager(private val context: Context, private val bluetoothServ
         override fun onReceive(context: Context, intent: Intent) {
             val action: String = intent.action ?: return
             if (action == BluetoothDevice.ACTION_FOUND) {
-                val device: BluetoothDevice =
-                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE) ?: return
-                _discoveredDevices.add(BluetoothDeviceItem(device.name ?: "Unknown", device.address))
+                val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                device?.let {
+                    val deviceItem = BluetoothDeviceItem(it.name ?: "Unknown Device", it.address)
+                    if (!_discoveredDevices.contains(deviceItem)) {
+                        _discoveredDevices.add(deviceItem)
+                    }
+                }
             }
         }
     }
