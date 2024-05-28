@@ -21,11 +21,13 @@ fun AddNewEventScreen(onSaveEvent: (Event) -> Unit, onPresetClick: () -> Unit, s
     Column(modifier = Modifier.padding(16.dp)) {
         TextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
         TextField(value = sendEvent, onValueChange = { sendEvent = it }, label = { Text("Send Event") })
+
+
         Button(onClick = onPresetClick) {
             Text(text = "Select Preset")
         }
         Text(text = selectedPreset?.name ?: "No preset selected")
-        Button(onClick = { onSaveEvent(Event(name, selectedPreset ?: Preset.DEFAULT, sendEvent)) }) {
+        Button(onClick = { onSaveEvent(Event(5 ,name, selectedPreset ?: Preset.DEFAULT, sendEvent)) }) {
             Text(text = "Save Event")
         }
     }
