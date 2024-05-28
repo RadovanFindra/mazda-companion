@@ -5,7 +5,7 @@ import com.example.mazdacompanionapp.data.AppContainer
 import com.example.mazdacompanionapp.data.AppDataContainer
 
 class CompanionAplication : Application() {
-    lateinit var container: AppContainer
+    var container: AppContainer
     override fun onCreate() {
         super.onCreate()
         container = AppDataContainer(this)

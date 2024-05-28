@@ -48,7 +48,6 @@ object HomeDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
-    navigateToItemUpdate: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
     ) {
@@ -76,7 +75,7 @@ fun HomeScreen(
     ) { innerPadding ->
         HomeBody(
             eventsList = homeUiState.itemList,
-            onItemClick = navigateToItemUpdate,
+            onItemClick = {},
             modifier = modifier.fillMaxSize(),
             contentPadding = innerPadding,
         )

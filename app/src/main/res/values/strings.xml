@@ -7,6 +7,8 @@
     <string name="save_action">Save</string>
     <string name="event_name_req">Event Name*</string>
     <string name="send_event_req">Send Event*</string>
+    <string name="required_fields">*required fields</string>
+    <string name="event_detail_title">Item Details</string>
 
 
 

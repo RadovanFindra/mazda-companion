@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 class OfflineEventsRepository(private val eventDao: EventDao) : EventsRepository {
     override fun getAllEventsStream(): Flow<List<Event>> = eventDao.getAllEvents()
 
-    override fun getEventStream(id: Int): Flow<Event?> = eventDao.getEvent(id)
+    override fun getEventStream(): Flow<List<Event>> = eventDao.getAllEvents()
 
     override suspend fun insertEvent(event: Event) = eventDao.insert(event)
 
