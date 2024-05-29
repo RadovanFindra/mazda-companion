@@ -36,9 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.mazdacompanionapp.Event
 import com.example.mazdacompanionapp.NavigationDestination
-import com.example.mazdacompanionapp.Preset
 import com.example.mazdacompanionapp.R
 
 
@@ -51,7 +49,6 @@ object EventAddDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 fun AddNewEventScreen(
     onSaveEvent: (Event) -> Unit,
-    onPresetClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -63,7 +60,6 @@ fun AddNewEventScreen(
     ) {innerPadding ->
         AddEventBody(
             onSaveEvent = onSaveEvent,
-            onPresetClick = onPresetClick,
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -106,11 +102,10 @@ fun CompanionTopAppBar(
 @Composable
 fun AddEventBody(
     onSaveEvent: (Event) -> Unit,
-    onPresetClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var name by remember { mutableStateOf("") }
-    var selectedPreset by remember { mutableStateOf(Preset.NOT_SELECTED) }
+    var selectedPreset by remember { mutableStateOf<Preset?>(null) }
     var expanded by remember { mutableStateOf(false) }
 
     Column(
@@ -120,7 +115,7 @@ fun AddEventBody(
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text(text = "Name") },
+            label = { Text(text = "Name*") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -140,7 +135,7 @@ fun AddEventBody(
                 modifier = Modifier.weight(1f)
             ) {
                 OutlinedButton(onClick = { expanded = true }) {
-                    Text(text = selectedPreset.title)
+                    Text(text = selectedPreset?.title ?: "Select Preset")
                 }
 
 
@@ -148,8 +143,7 @@ fun AddEventBody(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    Preset.values().forEach { preset ->
-                        if (preset.title != "Select Preset") {
+                    Preset.entries.forEach { preset ->
                             DropdownMenuItem(
                                 onClick = {
                                     selectedPreset = preset
@@ -159,7 +153,6 @@ fun AddEventBody(
                             ) {
                                 Text(text = preset.title)
                             }
-                        }
                     }
                 }
             }
@@ -167,10 +160,11 @@ fun AddEventBody(
             Spacer(modifier = Modifier.width(8.dp))
             OutlinedButton(
                 onClick = {
+
                     onSaveEvent(
                         Event(
                             name,
-                            selectedPreset,
+                            selectedPreset ?: Preset.DEFAULT,
                             mutableStateOf(true)
                         )
                     )

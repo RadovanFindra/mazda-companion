@@ -20,7 +20,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.mazdacompanionapp.screens.Event
 
+object MainEventScreenDestination : NavigationDestination {
+    override val route = "Main"
+    override val titleRes = R.string.event_main_title
+}
 
 @Composable
 fun MainEventScreen(onAddEventClick: () -> Unit, events: List<Event>, onEventClick: (Event) -> Unit) {

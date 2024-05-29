@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.screens
 
 import androidx.compose.runtime.MutableState
 
@@ -8,7 +8,6 @@ data class Event(
     var isEnabled: MutableState <Boolean>
 )
 enum class Preset(val title: String) {
-    NOT_SELECTED("Select Preset"),
     DEFAULT("Default"),
     MUSIC_MESSAGE("Music Message"),
     EVENTS("Events")

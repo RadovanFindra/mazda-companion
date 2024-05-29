@@ -1,32 +1,27 @@
 package com.example.mazdacompanionapp
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.mazdacompanionapp.data.Event
+import com.example.mazdacompanionapp.data.EventsRepository
+import kotlinx.coroutines.flow.SharingStarted
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
-class MainViewModel : ViewModel() {
+class MainViewModel(eventsRepository: EventsRepository) : ViewModel() {
 
-    // Presets
-    private val _presets = MutableLiveData<List<Preset>>(emptyList())
-    val presets: LiveData<List<Preset>> get() = _presets
+    val mainUiState: StateFlow<MainUiState> =
+        eventsRepository.getAllEventsStream().map { MainUiState(it) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = MainUiState()
+            )
 
-    // Selected preset
-    private val _selectedPreset = MutableLiveData<Preset?>(null)
-    val selectedPreset: LiveData<Preset?> get() = _selectedPreset
-
-    // Notifications
-    private val _notifications = MutableLiveData<List<NotificationData>>(emptyList())
-    val notifications: LiveData<List<NotificationData>> get() = _notifications
-
-    fun addPreset(preset: Preset) {
-        _presets.value = _presets.value.orEmpty() + preset
-    }
-
-    fun selectPreset(preset: Preset?) {
-        _selectedPreset.value = preset
-    }
-
-    fun sendNotifications() {
-        //TODO: Implement
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
     }
 }
+
+data class MainUiState(val eventList: List<Event> = listOf())

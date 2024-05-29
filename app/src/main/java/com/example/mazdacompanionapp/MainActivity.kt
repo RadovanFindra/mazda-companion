@@ -3,12 +3,11 @@ package com.example.mazdacompanionapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.mutableStateListOf
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.mazdacompanionapp.screens.AddNewEventScreen
+import androidx.compose.ui.Modifier
+import com.example.mazdacompanionapp.screens.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -27,35 +26,14 @@ class MainActivity : ComponentActivity() {
         bluetoothManager.initialize()
 
         setContent {
-
-                Surface() {
-                    val navController = rememberNavController()
-                    NavHost(navController, startDestination = Screens.MainScreen.route) {
-                        composable(Screens.MainScreen.route) {
-                            MainEventScreen(
-                                onAddEventClick = { navController.navigate(Screens.AddEventScreen.route) },
-                                events = events,
-                                onEventClick = { /* handle event click if needed */ }
-                            )
-                        }
-                        composable(Screens.AddEventScreen.route) {
-                            AddNewEventScreen(
-                                onSaveEvent = {
-                                    events.add(it)
-                                    navController.popBackStack()
-                                },
-                                onPresetClick = { navController.navigate(Screens.PresetSelectionScreen.route) },
-                            )
-                        }
-                        composable(Screens.PresetSelectionScreen.route) {
-                            PresetSelectionScreen(onPresetSelected = {
-                                navController.popBackStack()
-                            })
-                        }
+                Surface(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CompanionApp()
                     }
                 }
             }
-        }
+
 
 
     override fun onDestroy() {
