@@ -54,9 +54,10 @@ fun EventItem(event: Event, onClick: () -> Unit) {
                 Text(text = event.name, style = MaterialTheme.typography.h6)
                 Text(text = event.preset.name, style = MaterialTheme.typography.body2)
             }
+
             Switch(
-                checked = event.isEnabled,
-                onCheckedChange = { event.isEnabled = it }
+                checked = event.isEnabled.value,
+                onCheckedChange = { event.isEnabled.value = it}
             )
         }
     }

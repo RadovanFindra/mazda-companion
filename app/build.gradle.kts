@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.mazdacompanionapp"
-        minSdk = 29
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.4.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.2.0")
     implementation ("androidx.navigation:navigation-compose:2.4.0-alpha10")
+
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

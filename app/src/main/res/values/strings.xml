@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Mazda companion app</string>
+    <string name="event_add_title">Add Event</string>
+    <string name="back_button">Back</string>
 </resources>
