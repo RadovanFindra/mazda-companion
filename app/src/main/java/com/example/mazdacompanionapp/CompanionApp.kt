@@ -6,6 +6,5 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun CompanionApp(navController: NavHostController = rememberNavController()) {
-
     EventNavHost(navController = navController)
 }

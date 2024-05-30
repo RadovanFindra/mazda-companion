@@ -5,9 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
-import com.example.mazdacompanionapp.screens.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -16,7 +14,6 @@ import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
 
-    private val events = mutableStateListOf<Event>()
     private val bluetoothService = BluetoothService()
     private lateinit var bluetoothManager: MyBluetoothManager
 

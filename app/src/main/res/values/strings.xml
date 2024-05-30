@@ -4,4 +4,5 @@
     <string name="event_main_title">Events</string>
 
     <string name="back_button">Back</string>
+    <string name="empty_event_list">No Events\nTap + to Add</string>
 </resources>
