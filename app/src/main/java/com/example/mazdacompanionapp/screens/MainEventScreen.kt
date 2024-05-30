@@ -1,6 +1,5 @@
 package com.example.mazdacompanionapp
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -69,7 +68,7 @@ fun MainEventScreen(
     ) {innerPadding->
         MainBody(
             eventList = mainUiState.eventList,
-            onEventClick = {},
+            onEventClick = { viewModel.changeEnableState(it)},
             modifier = modifier.fillMaxWidth(),
             contentPadding = innerPadding
         )
@@ -120,10 +119,13 @@ private fun EventList(
 }
 
 @Composable
-fun EventItem(event: Event, onClick: () -> Unit) {
+fun EventItem(
+    event: Event,
+    onClick: () -> Unit
+) {
     Column(modifier = Modifier
         .padding(16.dp)
-        .clickable(onClick = onClick)) {
+        ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Column {
                 Text(text = event.name, style = MaterialTheme.typography.h6)
@@ -132,7 +134,7 @@ fun EventItem(event: Event, onClick: () -> Unit) {
 
             Switch(
                 checked = event.isEnabled,
-                onCheckedChange = { event.isEnabled = it}
+                onCheckedChange = { onClick }
             )
         }
     }
