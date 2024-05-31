@@ -2,6 +2,9 @@
 package com.example.mazdacompanionapp.data
 
 import android.content.Context
+import com.example.mazdacompanionapp.data.UpdateEvents.EventsDatabase
+import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
+import com.example.mazdacompanionapp.data.UpdateEvents.OfflineEventsRepository
 
 /**
  * App container for Dependency injection.

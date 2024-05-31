@@ -1,5 +1,5 @@
 
-package com.example.mazdacompanionapp.data
+package com.example.mazdacompanionapp.data.UpdateEvents
 
 import androidx.room.Dao
 import androidx.room.Delete

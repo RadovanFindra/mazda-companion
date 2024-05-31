@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.mazdacompanionapp.screens.AddNewEventScreen
 import com.example.mazdacompanionapp.screens.EventAddDestination
+import com.example.mazdacompanionapp.screens.MainEventScreen
+import com.example.mazdacompanionapp.screens.MainEventScreenDestination
 
 @Composable
 fun EventNavHost(
@@ -29,5 +31,6 @@ fun EventNavHost(
                         onNavigateUp = { navController.navigateUp() }
                     )
                 }
+
             }
 }

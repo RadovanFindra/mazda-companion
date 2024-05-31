@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.mazdacompanionapp.screens.EventAddViewModel
+import com.example.mazdacompanionapp.screens.MainViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
