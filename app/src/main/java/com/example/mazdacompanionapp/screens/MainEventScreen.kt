@@ -1,6 +1,5 @@
 package com.example.mazdacompanionapp.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,26 +9,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.DrawerState
 import androidx.compose.material.DrawerValue
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -45,7 +47,6 @@ import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 object MainEventScreenDestination : NavigationDestination {
@@ -88,40 +89,7 @@ fun MainEventScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun DrawerContent(
-    navController: NavHostController,
-    drawerState: DrawerState,
-    scope: CoroutineScope
-) {
-    Column {
-        Text(
-            text = "Navigation",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(16.dp)
-        )
-        Divider()
-        ListItem(
-            text = { Text("Events") },
-            modifier = Modifier.clickable {
-                scope.launch {
-                    drawerState.close()
-                    navController.navigate("MainEventScreen")
-                }
-            }
-        )
-        ListItem(
-            text = { Text("Bluetooth Devices") },
-            modifier = Modifier.clickable {
-                scope.launch {
-                    drawerState.close()
-                    navController.navigate("BluetoothDevicesScreen")
-                }
-            }
-        )
-    }
-}
+
 
 @Composable
 fun MainEventScreen(
@@ -133,6 +101,7 @@ fun MainEventScreen(
     MainBody(
         eventList = mainUiState.eventList,
         onEventClick = { viewModel.changeEnableState(it) },
+        onEventDelete = { viewModel.deleteEvent(it) },
         modifier = Modifier.fillMaxWidth(),
         contentPadding = innerPadding
     )
@@ -142,6 +111,7 @@ fun MainEventScreen(
 private fun MainBody(
     eventList: List<Event>,
     onEventClick: (Int) -> Unit,
+    onEventDelete: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -159,6 +129,7 @@ private fun MainBody(
             EventList(
                 eventList = eventList,
                 onEventClick = onEventClick,
+                onEventDelete = onEventDelete,
                 contentPadding = contentPadding,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
@@ -170,12 +141,17 @@ private fun MainBody(
 private fun EventList(
     eventList: List<Event>,
     onEventClick: (Int) -> Unit,
+    onEventDelete: (Int) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     LazyColumn {
         items(eventList) { event ->
-            EventItem(event = event, onClick = { onEventClick(event.id) })
+            EventItem(
+                event = event,
+                onClick = { onEventClick(event.id) },
+                onDeleteClick = { onEventDelete(event.id) }
+            )
         }
     }
 }
@@ -183,8 +159,23 @@ private fun EventList(
 @Composable
 fun EventItem(
     event: Event,
+    onDeleteClick: () -> Unit,
     onClick: () -> Unit
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        ConfirmDeleteDialog(
+            onConfirm = {
+                onDeleteClick()
+                showDialog = false
+            },
+            onDismiss = {
+                showDialog = false
+            }
+        )
+    }
+
     Column(modifier = Modifier
         .padding(16.dp)
     ) {
@@ -193,12 +184,41 @@ fun EventItem(
                 Text(text = event.name, style = MaterialTheme.typography.h6)
                 Text(text = event.preset.name, style = MaterialTheme.typography.body2)
             }
-            Switch(
-                checked = event.isEnabled,
-                onCheckedChange = { onClick() }
-            )
+            Row {
+                Switch(
+                    checked = event.isEnabled,
+                    onCheckedChange = { onClick() }
+                )
+                IconButton(onClick = { showDialog = true }) {
+                    Icon(Icons.Default.Delete, contentDescription = "Delete Event")
+                }
+            }
         }
     }
+}
+
+@Composable
+fun ConfirmDeleteDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Delete Event") },
+        text = { Text("Are you sure you want to delete this event?") },
+
+        confirmButton = {
+            Button(onClick = onConfirm) {
+                Text("Delete")
+            }
+        },
+
+        dismissButton = {
+            OutlinedButton(onClick = onDismiss,) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 @Composable

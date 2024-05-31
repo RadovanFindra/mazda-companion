@@ -20,6 +20,7 @@ class MainViewModel( private val eventsRepository: EventsRepository) : ViewModel
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = MainUiState()
             )
+
     fun changeEnableState(id: Int) {
         viewModelScope.launch {
             val event = eventsRepository.getEventStream(id).firstOrNull()
@@ -28,8 +29,15 @@ class MainViewModel( private val eventsRepository: EventsRepository) : ViewModel
                 eventsRepository.updateEvent(updatedEvent)
             }
         }
+    }
 
-
+    fun deleteEvent(id: Int) {
+        viewModelScope.launch {
+            val event = eventsRepository.getEventStream(id).firstOrNull()
+            event?.let {
+                eventsRepository.deleteEvent(event)
+            }
+        }
     }
 
     companion object {
