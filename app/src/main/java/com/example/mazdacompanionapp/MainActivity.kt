@@ -6,51 +6,49 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
 
-    private val bluetoothService = BluetoothService()
-    private lateinit var bluetoothManager: MyBluetoothManager
+   private val bluetoothService = BluetoothService()
+   lateinit var bluetoothManager: MyBluetoothManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bluetoothManager = MyBluetoothManager(this, bluetoothService)
         bluetoothManager.initialize()
+        bluetoothManager.startDiscovery()
 
         setContent {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     CompanionApp()
+//                    MainScreen(
+//                        onNotificationButtonClick = { /*TODO*/ },
+//                        onDeviceClick = {},
+//                        discoveredDevices = bluetoothManager.discoveredDevices
+//                    )
                     }
                 }
             }
 
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        bluetoothManager.unregisterReceiver()
-    }
 
-    private fun sendNotificationData() {
-        val json = NotificationListener.notificationsToJson()
-        bluetoothService.sendData(json)
-    }
 
-    private fun startPeriodicDataSend() {
-        CoroutineScope(Dispatchers.IO).launch {
-            while (true) {
-                delay(60000) // 1 minute
-                val data = JSONObject().put("preset", "default").put("timestamp", System.currentTimeMillis())
-                bluetoothService.sendData(data)
-            }
-        }
-    }
+//    private fun sendNotificationData() {
+//        val json = NotificationListener.notificationsToJson()
+//        bluetoothService.sendData(json)
+//    }
+//
+//    private fun startPeriodicDataSend() {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            while (true) {
+//                delay(60000) // 1 minute
+//                val data = JSONObject().put("preset", "default").put("timestamp", System.currentTimeMillis())
+//                bluetoothService.sendData(data)
+//            }
+//        }
+//    }
 }
 

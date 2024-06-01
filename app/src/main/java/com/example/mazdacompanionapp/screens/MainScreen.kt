@@ -17,9 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.mazdacompanionapp.BluetoothDeviceItem
+
 import com.example.mazdacompanionapp.NotificationData
 import com.example.mazdacompanionapp.NotificationListener
+import com.example.mazdacompanionapp.screens.Bluetooth.BluetoothDeviceItem
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

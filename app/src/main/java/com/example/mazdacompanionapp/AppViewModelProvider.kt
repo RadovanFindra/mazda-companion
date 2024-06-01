@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemAddViewModel
 import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemsViewModel
 import com.example.mazdacompanionapp.screens.EventAddViewModel
 import com.example.mazdacompanionapp.screens.MainViewModel
@@ -23,6 +24,12 @@ object AppViewModelProvider {
         initializer {
             DeviceItemsViewModel(
                 companionApplication().container.deviceItemsRepository
+            )
+        }
+        initializer {
+            DeviceItemAddViewModel(
+                companionApplication().container.deviceItemsRepository,
+                companionApplication().bluetoothManager
             )
         }
     }

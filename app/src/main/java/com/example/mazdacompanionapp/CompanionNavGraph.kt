@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.mazdacompanionapp.screens.AddNewEventScreen
+import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemAddScreen
+import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemAddScreenDestination
 import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemsScreen
 import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemsScreenDestination
 import com.example.mazdacompanionapp.screens.EventAddDestination
@@ -42,7 +44,13 @@ fun EventNavHost(
             composable(DeviceItemsScreenDestination.route){
                 DeviceItemsScreen(
                     navController,
-                    navigateToDeviceAdd = {}
+                    navigateToDeviceAdd = { navController.navigate(DeviceItemAddScreenDestination.route) }
+                )
+            }
+            composable(DeviceItemAddScreenDestination.route) {
+                DeviceItemAddScreen(
+                    navigateBack = { navController.popBackStack() },
+                    onNavigateUp = { navController.navigateUp() }
                 )
             }
         }

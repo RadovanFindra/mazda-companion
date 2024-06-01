@@ -7,10 +7,7 @@ import org.json.JSONObject
 import java.io.OutputStream
 import java.util.UUID
 
-data class BluetoothDeviceItem(
-    val name: String?,
-    val address: String
-)
+
 
 class BluetoothService {
 
