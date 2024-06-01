@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -191,7 +190,8 @@ fun EventItem(
             },
             onDismiss = {
                 showDialog = false
-            }
+            },
+            "Delete Event?"
         )
     }
 
@@ -219,12 +219,13 @@ fun EventItem(
 @Composable
 fun ConfirmDeleteDialog(
     onConfirm: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    message: String
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Delete Event") },
-        text = { Text("Are you sure you want to delete this event?") },
+        title = { Text(message) },
+        text = { Text("Are you sure you want to delete?") },
 
         confirmButton = {
             Button(onClick = onConfirm) {
@@ -240,13 +241,3 @@ fun ConfirmDeleteDialog(
     )
 }
 
-@Composable
-fun BluetoothDevicesScreen() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text("Bluetooth Devices Screen")
-    }
-}

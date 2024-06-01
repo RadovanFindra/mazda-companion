@@ -3,15 +3,20 @@ package com.example.mazdacompanionapp.screens.Bluetooth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.primarySurface
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -24,7 +29,10 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -37,6 +45,7 @@ import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
+import com.example.mazdacompanionapp.screens.ConfirmDeleteDialog
 import com.example.mazdacompanionapp.screens.DrawerContent
 import kotlinx.coroutines.launch
 
@@ -108,7 +117,7 @@ fun DeviceItemsScreen(
                 DeviceItemsBody(
                     deviceItemsList = deviceItemsUiState.deviceList,
                     onDevicetClick = { viewModel.changeEnableState(it) },
-                    onDeviceDelete = { viewModel.deleteEvent(it) },
+                    onDeviceDelete = { viewModel.deleteDevice(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -137,8 +146,8 @@ fun DeviceItemsBody(
         } else {
             DeviceItemsList(
                 deviceItemsList = deviceItemsList,
-                onEventClick = onDevicetClick,
-                onEventDelete = onDeviceDelete,
+                onItemClick = onDevicetClick,
+                onItemDelete = onDeviceDelete,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
         }
@@ -148,10 +157,58 @@ fun DeviceItemsBody(
 @Composable
 fun DeviceItemsList(
     deviceItemsList: List<DeviceItem>,
-    onEventClick: (Int) -> Unit,
-    onEventDelete: (Int) -> Unit,
+    onItemClick: (Int) -> Unit,
+    onItemDelete: (Int) -> Unit,
     modifier: Modifier
 ) {
-
-
+    LazyColumn {
+        items(deviceItemsList) { item ->
+            BluetoothItem(
+                item = item,
+                onItemClick = { onItemClick(item.id) },
+                onItemDelete = { onItemDelete(item.id) }
+            )
+        }
+    }
 }
+
+@Composable
+fun BluetoothItem(
+    item: DeviceItem,
+    onItemClick: () -> Unit,
+    onItemDelete: () -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        ConfirmDeleteDialog(
+            onConfirm = {
+                onItemDelete()
+                showDialog = false
+            },
+            onDismiss = {
+                showDialog = false
+            },
+            "Delete Device?"
+        )
+    }
+    Column(modifier = Modifier
+        .padding(16.dp)
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Column {
+                item.name?.let { Text(text = it, style = MaterialTheme.typography.h6) }
+            }
+            Row {
+                Switch(
+                    checked = item.isEnabled,
+                    onCheckedChange = { onItemClick() }
+                )
+                IconButton(onClick = { showDialog = true }) {
+                    Icon(Icons.Default.Delete, contentDescription = "Delete Event")
+                }
+            }
+        }
+    }
+}
+

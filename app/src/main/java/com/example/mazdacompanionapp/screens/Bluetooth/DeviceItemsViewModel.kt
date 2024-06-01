@@ -31,7 +31,7 @@ class DeviceItemsViewModel( private val devicesRepository: DeviceItemsRepository
         }
     }
 
-    fun deleteEvent(id: Int) {
+    fun deleteDevice(id: Int) {
         viewModelScope.launch {
             val device = devicesRepository.getDeviceItemStream(id).firstOrNull()
             device?.let {

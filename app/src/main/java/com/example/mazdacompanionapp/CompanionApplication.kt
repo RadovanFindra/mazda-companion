@@ -14,7 +14,7 @@ class CompanionApplication : Application() {
         bluetoothService = BluetoothService()
         bluetoothManager = MyBluetoothManager(this, bluetoothService)
         bluetoothManager.initialize()
-        bluetoothManager.startDiscovery()
+
     }
 
 }

@@ -19,8 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,7 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
-
+import kotlinx.coroutines.launch
 
 object DeviceItemAddScreenDestination : NavigationDestination {
     override val route = "Devices_add_screen"
@@ -41,10 +40,11 @@ fun DeviceItemAddScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: DeviceItemAddViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: DeviceItemAddViewModel = viewModel( factory = AppViewModelProvider.Factory)
 ) {
-    val uiState by viewModel.deviceItemAddUiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
+    viewModel.bluetoothManager.startDiscovery()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -65,19 +65,26 @@ fun DeviceItemAddScreen(
                 }
             )
         }
-    ) { innerPadding ->
+    ) {innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            DeviceList(
-                onDeviceSelected = {},
-                discoveredDevices = uiState.bluetoothDeviceItem
-            )
+        DeviceList(
+            onDeviceSelected =
+                {
+                    coroutineScope.launch {
+                        viewModel.saveDevice(it)
+                        navigateBack()
+                    }
+                },
+            discoveredDevices = viewModel.bluetoothManager.discoveredDevices
+        )
         }
     }
 }
+
 
 @Composable
 fun DeviceList(
