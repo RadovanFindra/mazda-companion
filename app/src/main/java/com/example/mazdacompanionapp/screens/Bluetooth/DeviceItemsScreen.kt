@@ -1,6 +1,8 @@
 package com.example.mazdacompanionapp.screens.Bluetooth
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -53,6 +55,7 @@ object DeviceItemsScreenDestination : NavigationDestination {
     override val route = "Devices"
     override val titleRes = R.string.deviceItems_main_title
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceItemsScreen(
@@ -100,7 +103,8 @@ fun DeviceItemsScreen(
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = navigateToDeviceAdd,
+                FloatingActionButton(
+                    onClick = navigateToDeviceAdd,
                     backgroundColor = MaterialTheme.colors.primarySurface,
                     contentColor = MaterialTheme.colors.surface
                 ) {
@@ -113,10 +117,11 @@ fun DeviceItemsScreen(
                     .padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-               val deviceItemsUiState by viewModel.deviceItemsUiState.collectAsState()
+                val deviceItemsUiState by viewModel.deviceItemsUiState.collectAsState()
                 DeviceItemsBody(
                     deviceItemsList = deviceItemsUiState.deviceList,
-                    onDevicetClick = { viewModel.changeEnableState(it) },
+                    onDevicetSwitch = { viewModel.changeEnableState(it) },
+                    onDevicetClick = { },
                     onDeviceDelete = { viewModel.deleteDevice(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -128,11 +133,12 @@ fun DeviceItemsScreen(
 @Composable
 fun DeviceItemsBody(
     deviceItemsList: List<DeviceItem>,
+    onDevicetSwitch: (Int) -> Unit,
     onDevicetClick: (Int) -> Unit,
     onDeviceDelete: (Int) -> Unit,
     modifier: Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-){
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
@@ -146,6 +152,7 @@ fun DeviceItemsBody(
         } else {
             DeviceItemsList(
                 deviceItemsList = deviceItemsList,
+                onItemSwitch = onDevicetSwitch,
                 onItemClick = onDevicetClick,
                 onItemDelete = onDeviceDelete,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
@@ -158,14 +165,18 @@ fun DeviceItemsBody(
 fun DeviceItemsList(
     deviceItemsList: List<DeviceItem>,
     onItemClick: (Int) -> Unit,
+    onItemSwitch: (Int) -> Unit,
     onItemDelete: (Int) -> Unit,
     modifier: Modifier
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier
+    ) {
         items(deviceItemsList) { item ->
             BluetoothItem(
                 item = item,
                 onItemClick = { onItemClick(item.id) },
+                onItemSwitch = { onItemSwitch(item.id) },
                 onItemDelete = { onItemDelete(item.id) }
             )
         }
@@ -176,6 +187,7 @@ fun DeviceItemsList(
 fun BluetoothItem(
     item: DeviceItem,
     onItemClick: () -> Unit,
+    onItemSwitch: () -> Unit,
     onItemDelete: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -192,20 +204,28 @@ fun BluetoothItem(
             "Delete Device?"
         )
     }
-    Column(modifier = Modifier
-        .padding(16.dp)
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onItemClick() }, horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(
+                modifier = Modifier,
+            ) {
                 item.name?.let { Text(text = it, style = MaterialTheme.typography.h6) }
+
             }
             Row {
                 Switch(
                     checked = item.isEnabled,
-                    onCheckedChange = { onItemClick() }
+                    onCheckedChange = { onItemSwitch() }
                 )
                 IconButton(onClick = { showDialog = true }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete Event")
+                    Icon(Icons.Default.Delete, contentDescription = "Delete Device")
                 }
             }
         }

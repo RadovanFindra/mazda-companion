@@ -99,4 +99,7 @@ android {
         debugImplementation(libs.androidx.ui.test.manifest)
     }
 }
+dependencies {
+    implementation(libs.androidx.ui.text.google.fonts)
+}
 

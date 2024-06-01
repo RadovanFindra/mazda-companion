@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class DeviceItemsViewModel( private val devicesRepository: DeviceItemsRepository) : ViewModel() {
+class DeviceItemsViewModel(private val devicesRepository: DeviceItemsRepository) : ViewModel() {
 
     val deviceItemsUiState: StateFlow<DeviceItemsUiState> =
         devicesRepository.getAllDeviceItemsStream().map { DeviceItemsUiState(it) }
