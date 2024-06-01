@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
+import com.example.mazdacompanionapp.data.UpdateEvents.Preset
 
 class EventAddViewModel(private val eventsRepository: EventsRepository): ViewModel() {
 var eventUiState by mutableStateOf(EventUiState())

@@ -1,13 +1,13 @@
 
 package com.example.mazdacompanionapp.data.UpdateEvents
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.mazdacompanionapp.screens.Preset
 
 /**
  * Entity data class represents a single row in the database.
  */
-@androidx.room.Entity(tableName = "events")
+@Entity(tableName = "events")
 data class Event(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -15,4 +15,10 @@ data class Event(
     val preset: Preset,
     var isEnabled: Boolean
 )
+
+enum class Preset(val title: String) {
+    DEFAULT("Default"),
+    MUSIC_MESSAGE("Music Message"),
+    EVENTS("Events")
+}
 

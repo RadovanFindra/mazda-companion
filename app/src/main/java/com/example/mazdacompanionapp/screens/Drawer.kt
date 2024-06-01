@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemsScreenDestination
 
 @Composable
 
@@ -27,7 +28,7 @@ fun DrawerContent(
         NavigationDrawerItem(
             label = { Text(text = "Bluetooth") },
             selected = false,
-            onClick = { }//onDestinationClicked() }
+            onClick = { onDestinationClicked(DeviceItemsScreenDestination.route) }
         )
     }
 }

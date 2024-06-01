@@ -5,4 +5,6 @@
 
     <string name="back_button">Back</string>
     <string name="empty_event_list">No Events\nTap + to Add</string>
+    <string name="deviceItems_main_title">Your Devices</string>
+    <string name="empty_device_list">No devices \n</string>
 </resources>
