@@ -17,6 +17,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.primarySurface
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +26,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,10 +61,24 @@ fun AddNewEventScreen(
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
-            CompanionTopAppBar(
-                title = "ADD",
-                canNavigateBack = canNavigateBack,
-                navigateUp = onNavigateUp)
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = androidx.compose.material.MaterialTheme.colors.primarySurface,
+                    titleContentColor = androidx.compose.material.MaterialTheme.colors.primary,
+                ),
+                title = { Text(stringResource(id = R.string.event_add_title)) },
+                navigationIcon = {
+                    if (canNavigateBack) {
+                        IconButton(onClick = onNavigateUp) {
+                            androidx.compose.material3.Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.back_button)
+                            )
+                        }
+                    }
+                }
+
+            )
         }
     ) {innerPadding ->
         AddEventBody(
@@ -86,7 +101,6 @@ fun AddNewEventScreen(
                 .fillMaxWidth()
         )
     }
-
 }
 
 
@@ -115,8 +129,6 @@ fun AddEventBody(
             Text(text = "Save Event")
         }
     }
-
-
 }
 
 
@@ -140,7 +152,6 @@ fun AddForm(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             ),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -159,7 +170,6 @@ fun AddForm(
                 OutlinedButton(onClick = { expanded = true }) {
                     Text(text = selectedPreset?.title ?: "Select Preset")
                 }
-
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
@@ -175,40 +185,10 @@ fun AddForm(
                         }
                     }
                 }
-
-
             }
         }
     }
-
 }
 
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CompanionTopAppBar(
-    title: String,
-    canNavigateBack: Boolean,
-    modifier: Modifier = Modifier,
-    scrollBehavior: TopAppBarScrollBehavior? = null,
-    navigateUp: () -> Unit = {}
-)
-{
-    CenterAlignedTopAppBar(title = { androidx.compose.material3.Text(title) },
-        modifier = modifier,
-        scrollBehavior = scrollBehavior,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    androidx.compose.material3.Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
-                    )
-                }
-            }
-        }
-    )
-}
 
 
