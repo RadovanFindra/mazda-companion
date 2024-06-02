@@ -55,7 +55,6 @@ object DeviceItemsScreenDestination : NavigationDestination {
     override val route = "Devices"
     override val titleRes = R.string.deviceItems_main_title
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceItemsScreen(
@@ -103,8 +102,7 @@ fun DeviceItemsScreen(
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(
-                    onClick = navigateToDeviceAdd,
+                FloatingActionButton(onClick = navigateToDeviceAdd,
                     backgroundColor = MaterialTheme.colors.primarySurface,
                     contentColor = MaterialTheme.colors.surface
                 ) {
@@ -120,8 +118,8 @@ fun DeviceItemsScreen(
                 val deviceItemsUiState by viewModel.deviceItemsUiState.collectAsState()
                 DeviceItemsBody(
                     deviceItemsList = deviceItemsUiState.deviceList,
-                    onDevicetSwitch = { viewModel.changeEnableState(it) },
-                    onDevicetClick = { },
+                    onDevicetSwitch = {viewModel.changeEnableState(it)},
+                    onDevicetClick = {  },
                     onDeviceDelete = { viewModel.deleteDevice(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -138,7 +136,7 @@ fun DeviceItemsBody(
     onDeviceDelete: (Int) -> Unit,
     modifier: Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
+){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
@@ -175,7 +173,7 @@ fun DeviceItemsList(
         items(deviceItemsList) { item ->
             BluetoothItem(
                 item = item,
-                onItemClick = { onItemClick(item.id) },
+                onItemClick = {onItemClick(item.id)},
                 onItemSwitch = { onItemSwitch(item.id) },
                 onItemDelete = { onItemDelete(item.id) }
             )
@@ -204,19 +202,15 @@ fun BluetoothItem(
             "Delete Device?"
         )
     }
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
+    Column(modifier = Modifier
+        .padding(16.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onItemClick() }, horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        Row(modifier = Modifier.fillMaxWidth()
+            .clickable { onItemClick() }, horizontalArrangement = Arrangement.SpaceBetween) {
             Box(
-                modifier = Modifier,
+                modifier = Modifier
             ) {
-                item.name?.let { Text(text = it, style = MaterialTheme.typography.h6) }
+                item.name?.let {Text(text = it, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.onPrimary) }
 
             }
             Row {

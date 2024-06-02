@@ -17,11 +17,11 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.primarySurface
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -57,17 +57,22 @@ fun AddNewEventScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: EventAddViewModel = viewModel( factory = AppViewModelProvider.Factory)
+    viewModel: EventAddViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = androidx.compose.material.MaterialTheme.colors.primarySurface,
-                    titleContentColor = androidx.compose.material.MaterialTheme.colors.primary,
+                    containerColor = colorScheme.tertiaryContainer,
+                    titleContentColor = colorScheme.onTertiaryContainer,
                 ),
-                title = { Text(stringResource(id = R.string.event_add_title)) },
+                title = {
+                    Text(
+                        stringResource(id = R.string.event_add_title),
+                        color = colorScheme.onTertiaryContainer
+                    )
+                },
                 navigationIcon = {
                     if (canNavigateBack) {
                         IconButton(onClick = onNavigateUp) {
@@ -78,19 +83,18 @@ fun AddNewEventScreen(
                         }
                     }
                 }
-
             )
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         AddEventBody(
             eventUiState = viewModel.eventUiState,
             onEventValueChange = viewModel::updateUiState,
             onSaveClick =
             {
                 coroutineScope.launch {
-                viewModel.saveEvent()
-                navigateBack()
-            }
+                    viewModel.saveEvent()
+                    navigateBack()
+                }
             },
             modifier = Modifier
                 .padding(
@@ -125,7 +129,13 @@ fun AddEventBody(
         OutlinedButton(
             onClick = onSaveClick,
             enabled = eventUiState.isAddValid,
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = colorScheme.surfaceTint,
+                contentColor = colorScheme.onSurface,
+                disabledContainerColor = colorScheme.surface,
+            ),
             modifier = Modifier.fillMaxWidth()
+
         ) {
             Text(text = "Save Event")
         }
@@ -149,15 +159,15 @@ fun AddForm(
         OutlinedTextField(
             value = eventDetails.name,
             onValueChange = { onEventValueChange(eventDetails.copy(name = it)) },
-            label = { Text(text = "Name*") },
+            label = { Text(text = "Name*", color = colorScheme.onSurface) },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = colorScheme.secondaryContainer,
+                unfocusedContainerColor = colorScheme.secondaryContainer,
             ),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             enabled = enabled
-            )
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -168,7 +178,14 @@ fun AddForm(
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                OutlinedButton(onClick = { expanded = true }) {
+                OutlinedButton(
+                    onClick = { expanded = true },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = colorScheme.surfaceTint,
+                        contentColor = colorScheme.onSurface,
+                        disabledContainerColor = colorScheme.surface,
+                    ),
+                ) {
                     Text(text = selectedPreset?.title ?: "Select Preset")
                 }
                 DropdownMenu(
@@ -180,9 +197,10 @@ fun AddForm(
                             onClick = {
                                 selectedPreset = preset
                                 expanded = false
-                            }
-                        ) {
-                            Text(text = preset.title)
+                            },
+
+                            ) {
+                            Text(text = preset.title, color = colorScheme.onSurface)
                         }
                     }
                 }

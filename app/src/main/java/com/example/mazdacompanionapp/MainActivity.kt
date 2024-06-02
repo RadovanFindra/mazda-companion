@@ -5,39 +5,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
 
 class MainActivity : ComponentActivity() {
 
-   private val bluetoothService = BluetoothService()
-   lateinit var bluetoothManager: MyBluetoothManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bluetoothManager = MyBluetoothManager(this, bluetoothService)
-        bluetoothManager.initialize()
-        bluetoothManager.startDiscovery()
 
         setContent {
             MazdaCompanionAppTheme() {
-            Surface(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CompanionApp()
-//                    MainScreen(
-//                        onNotificationButtonClick = { /*TODO*/ },
-//                        onDeviceClick = {},
-//                        discoveredDevices = bluetoothManager.discoveredDevices
-//                    )
-            }
-        }
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.surface
+                ) {
+                    CompanionApp()
                 }
             }
-
-
-
-
+        }
+    }
 
 //    private fun sendNotificationData() {
 //        val json = NotificationListener.notificationsToJson()

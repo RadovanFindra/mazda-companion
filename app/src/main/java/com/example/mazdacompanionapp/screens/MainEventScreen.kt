@@ -18,12 +18,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.primarySurface
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -86,10 +86,11 @@ fun MainEventScreen(
             topBar = {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colors.primarySurface,
-                        titleContentColor = MaterialTheme.colors.primary,
+                        containerColor =  colorScheme.tertiaryContainer,
+                        titleContentColor =  colorScheme.onTertiaryContainer,
                     ),
-                    title = { Text(stringResource(id = R.string.event_main_title)) },
+
+                    title = { Text(stringResource(id = R.string.event_main_title), color =  colorScheme.onTertiaryContainer) },
                     navigationIcon = {
                         IconButton(onClick = {
                             coroutineScope.launch {
@@ -103,8 +104,8 @@ fun MainEventScreen(
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = navigateToEventAdd,
-                    backgroundColor = MaterialTheme.colors.primarySurface,
-                    contentColor = MaterialTheme.colors.surface
+                    backgroundColor = colorScheme.tertiaryContainer,
+                    contentColor = colorScheme.onTertiaryContainer
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
@@ -143,6 +144,7 @@ private fun MainBody(
             Text(
                 text = stringResource(R.string.empty_event_list),
                 textAlign = TextAlign.Center,
+                color = colorScheme.onSurface,
                 modifier = Modifier.padding(contentPadding)
             )
         } else {
@@ -198,10 +200,13 @@ fun EventItem(
     Column(modifier = Modifier
         .padding(16.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Column {
-                Text(text = event.name, style = MaterialTheme.typography.h6)
-                Text(text = event.preset.name, style = MaterialTheme.typography.body2)
+                Text(text = event.name, style = MaterialTheme.typography.h6, color = colorScheme.onSurface)
+                Text(text = event.preset.name, style = MaterialTheme.typography.body2, color = colorScheme.onSurface)
             }
             Row {
                 Switch(
@@ -209,7 +214,7 @@ fun EventItem(
                     onCheckedChange = { onClick() }
                 )
                 IconButton(onClick = { showDialog = true }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete Event")
+                    Icon(Icons.Default.Delete, contentDescription = "Delete Event", tint = colorScheme.onSurface)
                 }
             }
         }
