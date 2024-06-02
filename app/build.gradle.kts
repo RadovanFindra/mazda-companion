@@ -90,6 +90,8 @@ android {
         implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
 
         implementation ("com.google.code.gson:gson:2.8.8")
+        implementation(libs.androidx.ui.text.google.fonts)
+
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
@@ -99,8 +101,5 @@ android {
         debugImplementation(libs.androidx.ui.test.manifest)
     }
 }
-dependencies {
-    implementation(libs.androidx.ui.text.google.fonts)
-    implementation(libs.androidx.material3.android)
-}
+
 

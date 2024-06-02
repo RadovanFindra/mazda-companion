@@ -9,15 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -28,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -40,7 +39,6 @@ import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceDetails
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemEditUiState
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemEditViewModel
 import kotlinx.coroutines.launch
 
@@ -59,9 +57,9 @@ fun EditBluetoothItem(
     modifier: Modifier = Modifier,
     viewModel: DeviceItemEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-
     val coroutineScope = rememberCoroutineScope()
-    val uiState = viewModel.deviceItemEditUiState.collectAsState()
+    val uiState by viewModel.deviceItemEditUiState.collectAsState()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -82,18 +80,18 @@ fun EditBluetoothItem(
                             contentDescription = stringResource(R.string.back_button)
                         )
                     }
-
                 }
             )
         },
         modifier = modifier,
     ) { innerPadding ->
         EditBluetoothItemBody(
-            deviceItemEditUiState = uiState.value,
-            OnDeviceValueChange = viewModel::updateUiState,
+            deviceDetails = uiState.deviceDetails,
+            onDeviceValueChange = viewModel::updateUiState,
+            events = uiState.events,
             onSaveClick = {
                 coroutineScope.launch {
-                    viewModel.updateDevice()
+                    viewModel.updateDevice(uiState.deviceDetails)
                     navigateBack()
                 }
             },
@@ -103,15 +101,15 @@ fun EditBluetoothItem(
                     top = innerPadding.calculateTopPadding(),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                 )
-
         )
     }
 }
 
 @Composable
 fun EditBluetoothItemBody(
-    deviceItemEditUiState: DeviceItemEditUiState,
-    OnDeviceValueChange: (DeviceDetails) -> Unit,
+    deviceDetails: DeviceDetails,
+    onDeviceValueChange: (DeviceDetails) -> Unit,
+    events: List<Event>,
     onSaveClick: () -> Unit,
     modifier: Modifier
 ) {
@@ -120,9 +118,9 @@ fun EditBluetoothItemBody(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_big))
     ) {
         DeviceEditForm(
-            deviceDetails = deviceItemEditUiState.deviceDetails,
-            events = deviceItemEditUiState.events,
-            onDeviceChange = OnDeviceValueChange
+            deviceDetails = deviceDetails,
+            events = events,
+            onDeviceChange = onDeviceValueChange
         )
 
         OutlinedButton(
@@ -133,9 +131,7 @@ fun EditBluetoothItemBody(
                 disabledContainerColor = colorScheme.surface,
             ),
             modifier = Modifier.fillMaxWidth()
-
         ) {
-
             Text(text = "Save Device")
         }
     }
@@ -144,17 +140,17 @@ fun EditBluetoothItemBody(
 @Composable
 fun DeviceEditForm(
     deviceDetails: DeviceDetails,
-    onDeviceChange: (DeviceDetails) -> Unit = {},
     events: List<Event>,
+    onDeviceChange: (DeviceDetails) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        deviceDetails.name?.let { it ->
+        deviceDetails.name?.let { name ->
             OutlinedTextField(
-                value = it,
+                value = name,
                 onValueChange = { onDeviceChange(deviceDetails.copy(name = it)) },
                 label = { Text(text = "Name", color = colorScheme.onSurface) },
                 colors = OutlinedTextFieldDefaults.colors(
@@ -177,41 +173,57 @@ fun DeviceEditForm(
             singleLine = true,
             enabled = false
         )
-        AssignEvents(events = events)
-
+        AssignEvents(
+            events = events,
+            deviceDetails = deviceDetails,
+            onDeviceChange = onDeviceChange
+        )
     }
 }
 
 @Composable
 fun AssignEvents(
-    events: List<Event>
+    events: List<Event>,
+    deviceDetails: DeviceDetails,
+    onDeviceChange: (DeviceDetails) -> Unit
 ) {
-    List
+    LazyColumn {
         items(events) { event ->
-            EventItemAssing(
-                event = event
+            val containsEvent = deviceDetails.events.contains(event)
+            EventItemAssign(
+                event = event,
+                contains = containsEvent,
+                onCheckedChange = { isChecked ->
+                    val updatedEvents = if (isChecked) {
+                        deviceDetails.events + event
+                    } else {
+                        deviceDetails.events - event
+                    }
+                    onDeviceChange(deviceDetails.copy(events = updatedEvents))
+                }
             )
         }
     }
 }
 
 @Composable
-fun EventItemAssing(
-    event: Event
+fun EventItemAssign(
+    event: Event,
+    contains: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
-
-    Column {
-        ListItem(
-            headlineContent = { Text("One line list item with 24x24 icon") },
-            leadingContent = {
-                Icon(
-                    Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
-                )
-            }
-        )
-        HorizontalDivider()
-    }
+    ListItem(
+        headlineContent = {
+            Text(
+                event.name,
+                color = colorScheme.onSurface
+            )
+        },
+        trailingContent = {
+            Checkbox(
+                checked = contains,
+                onCheckedChange = { onCheckedChange(it) }
+            )
+        }
+    )
 }
-
-

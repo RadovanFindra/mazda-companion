@@ -41,8 +41,8 @@ class DeviceItemEditViewModel(
         _deviceItemEditUiState.value = _deviceItemEditUiState.value.copy(deviceDetails = deviceDetails)
     }
 
-    suspend fun updateDevice() {
-        deviceItemsRepository.updateDeviceItem(_deviceItemEditUiState.value.deviceDetails.toDevice())
+    suspend fun updateDevice(deviceDetails: DeviceDetails) {
+        deviceItemsRepository.updateDeviceItem(deviceDetails.toDevice())
     }
 
     companion object {
@@ -51,7 +51,7 @@ class DeviceItemEditViewModel(
 }
 
 data class DeviceItemEditUiState(
-    val deviceDetails: DeviceDetails = DeviceDetails(),
+    var deviceDetails: DeviceDetails = DeviceDetails(),
     val events: List<Event> = emptyList()
 )
 
@@ -59,7 +59,7 @@ data class DeviceDetails(
     val id: Int = 0,
     val name: String? = "",
     val address: String = "",
-    val events: MutableList<Event> = mutableListOf(),
+    val events: List<Event> = mutableListOf(),
     val isEnabled: Boolean = false
 )
 
@@ -80,6 +80,6 @@ fun DeviceDetails.toDevice(): DeviceItem = DeviceItem(
     id = id,
     name = name,
     address = address,
-    events = events,
+    events = events.toMutableList(),
     isEnabled = isEnabled
 )
