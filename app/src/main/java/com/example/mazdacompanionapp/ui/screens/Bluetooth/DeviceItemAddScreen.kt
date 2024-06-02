@@ -41,48 +41,51 @@ object DeviceItemAddScreenDestination : NavigationDestination {
 fun DeviceItemAddScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
-    canNavigateBack: Boolean = true,
-    viewModel: DeviceItemAddViewModel = viewModel( factory = AppViewModelProvider.Factory)
+    viewModel: DeviceItemAddViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-
     viewModel.bluetoothManager.startDiscovery()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor =  colorScheme.tertiaryContainer,
-                    titleContentColor =  colorScheme.onTertiaryContainer,
+                    containerColor = colorScheme.tertiaryContainer,
+                    titleContentColor = colorScheme.onTertiaryContainer,
                 ),
-                title = { Text(stringResource(id = R.string.deviceItems_add_title),color =  colorScheme.onTertiaryContainer) },
+                title = {
+                    Text(
+                        stringResource(id = R.string.deviceItems_add_title),
+                        color = colorScheme.onTertiaryContainer
+                    )
+                },
                 navigationIcon = {
-                    if (canNavigateBack) {
-                        IconButton(onClick = onNavigateUp) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.back_button)
-                            )
-                        }
+                    IconButton(onClick = onNavigateUp) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back_button)
+                        )
                     }
+
                 }
             )
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-        DeviceList(
-            onDeviceSelected =
+            DeviceList(
+                onDeviceSelected =
                 {
                     coroutineScope.launch {
                         viewModel.saveDevice(it)
                         navigateBack()
                     }
                 },
-            discoveredDevices = viewModel.bluetoothManager.discoveredDevices
-        )
+                discoveredDevices = viewModel.bluetoothManager.discoveredDevices
+            )
         }
     }
 }
@@ -110,8 +113,16 @@ fun DeviceItem(
         .padding(16.dp)
         .clickable { onClick() }
     ) {
-        Text(text = device.name ?: "Unknown Device", style = MaterialTheme.typography.h6,color = colorScheme.onSurface)
-        Text(text = device.address, style = MaterialTheme.typography.body2,color = colorScheme.onSurface)
+        Text(
+            text = device.name ?: "Unknown Device",
+            style = MaterialTheme.typography.h6,
+            color = colorScheme.onSurface
+        )
+        Text(
+            text = device.address,
+            style = MaterialTheme.typography.body2,
+            color = colorScheme.onSurface
+        )
     }
 }
 

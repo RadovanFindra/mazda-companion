@@ -140,7 +140,10 @@ fun AddEventBody(
             modifier = Modifier.fillMaxWidth()
 
         ) {
-            Text(text = "Save Event")
+            if (eventUiState.isAddValid) {
+                Text(text = "Save Event")
+            } else
+                Text(text = "Save Event", color = colorScheme.onSurface)
         }
     }
 }
@@ -189,7 +192,7 @@ fun AddForm(
                         disabledContainerColor = colorScheme.surface,
                     ),
                 ) {
-                    Text(text = selectedPreset?.title ?: "Select Preset")
+                    Text(text = eventDetails.preset?.title ?: "Select Preset")
                 }
                 DropdownMenu(
                     expanded = expanded,
@@ -199,6 +202,7 @@ fun AddForm(
                         DropdownMenuItem(
                             onClick = {
                                 selectedPreset = preset
+                                eventDetails.preset = selectedPreset
                                 expanded = false
                             },
 

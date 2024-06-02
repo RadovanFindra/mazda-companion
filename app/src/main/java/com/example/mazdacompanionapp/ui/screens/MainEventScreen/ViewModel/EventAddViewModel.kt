@@ -36,7 +36,7 @@ data class EventUiState(
 data class EventDetails(
     val id: Int = 0,
     val name: String ="",
-    val preset: Preset? = null,
+    var preset: Preset? = null,
     var isEnabled: Boolean = true
 )
 

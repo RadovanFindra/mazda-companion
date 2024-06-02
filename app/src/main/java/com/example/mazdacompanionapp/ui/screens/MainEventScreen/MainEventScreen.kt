@@ -65,6 +65,8 @@ fun MainEventScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    val mainUiState by viewModel.mainUiState.collectAsState()
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
@@ -118,7 +120,6 @@ fun MainEventScreen(
                     .padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                val mainUiState by viewModel.mainUiState.collectAsState()
                 MainBody(
                     eventList = mainUiState.eventList,
                     onEventClick = { viewModel.changeEnableState(it) },
@@ -161,7 +162,7 @@ private fun MainBody(
 }
 
 @Composable
-private fun EventList(
+fun EventList(
     eventList: List<Event>,
     onEventClick: (Int) -> Unit,
     onEventDelete: (Int) -> Unit,
@@ -235,8 +236,9 @@ fun ConfirmDeleteDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(message) },
-        text = { Text("Are you sure you want to delete?") },
+        title = { Text(message, color = colorScheme.onSecondaryContainer) },
+        containerColor = colorScheme.secondaryContainer,
+        text = { Text("Are you sure you want to delete?", color = colorScheme.onSecondaryContainer) },
 
         confirmButton = {
             Button(onClick = onConfirm) {
@@ -246,7 +248,7 @@ fun ConfirmDeleteDialog(
 
         dismissButton = {
             OutlinedButton(onClick = onDismiss,) {
-                Text("Cancel")
+                Text("Cancel", color = colorScheme.onSecondaryContainer)
             }
         }
     )

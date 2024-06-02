@@ -7,13 +7,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.mazdacompanionapp.ui.screens.MainEventScreen.AddNewEventScreen
+import androidx.navigation.navArgument
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemAddScreen
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemAddScreenDestination
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemEditScreenDestination
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemsScreen
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemsScreenDestination
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.EditBluetoothItem
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.AddNewEventScreen
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.EventAddDestination
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreen
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreenDestination
@@ -23,7 +27,7 @@ import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreenD
 fun EventNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
-){
+) {
     Scaffold(
     ) { innerPadding ->
         NavHost(
@@ -35,7 +39,7 @@ fun EventNavHost(
             composable(MainEventScreenDestination.route) {
                 MainEventScreen(
                     navController = navController,
-                    navigateToEventAdd ={ navController.navigate(EventAddDestination.route) }
+                    navigateToEventAdd = { navController.navigate(EventAddDestination.route) }
                 )
             }
             composable(EventAddDestination.route) {
@@ -44,14 +48,28 @@ fun EventNavHost(
                     onNavigateUp = { navController.navigateUp() }
                 )
             }
-            composable(DeviceItemsScreenDestination.route){
+            composable(DeviceItemsScreenDestination.route) {
                 DeviceItemsScreen(
                     navController,
-                    navigateToDeviceAdd = { navController.navigate(DeviceItemAddScreenDestination.route) }
+                    navigateToDeviceAdd = { navController.navigate(DeviceItemAddScreenDestination.route) },
+                    navigateToDeviceEdit = { navController.navigate("${DeviceItemEditScreenDestination.route}/$it") }
                 )
             }
             composable(DeviceItemAddScreenDestination.route) {
                 DeviceItemAddScreen(
+                    navigateBack = { navController.popBackStack() },
+                    onNavigateUp = { navController.navigateUp() }
+                )
+            }
+            composable(
+                route = DeviceItemEditScreenDestination.routeWithArgs,
+                arguments = listOf(navArgument(
+                    DeviceItemEditScreenDestination.deviceIdArg
+                ) {
+                    type = NavType.IntType
+                })
+            ) {
+                EditBluetoothItem(
                     navigateBack = { navController.popBackStack() },
                     onNavigateUp = { navController.navigateUp() }
                 )

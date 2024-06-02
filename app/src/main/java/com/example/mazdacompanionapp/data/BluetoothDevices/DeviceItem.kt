@@ -19,7 +19,9 @@ data class DeviceItem(
     val address: String,
     val events: MutableList<Event>,
     val isEnabled: Boolean
-)
+) {
+
+}
 
 
 class Converters {

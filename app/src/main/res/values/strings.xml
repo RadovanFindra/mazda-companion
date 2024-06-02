@@ -7,6 +7,8 @@
     <string name="empty_event_list">No Events\nTap + to Add</string>
     <string name="deviceItems_main_title">Your Devices</string>
     <string name="deviceItems_add_title">Add Bluetooth Device</string>
+    <string name="deviceItems_edit_title">Edit Bluetooth Device</string>
+
 
     <string name="empty_device_list">No devices \n</string>
 </resources>

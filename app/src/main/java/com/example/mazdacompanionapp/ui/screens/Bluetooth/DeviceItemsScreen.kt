@@ -61,6 +61,7 @@ object DeviceItemsScreenDestination : NavigationDestination {
 fun DeviceItemsScreen(
     navController: NavHostController,
     navigateToDeviceAdd: () -> Unit,
+    navigateToDeviceEdit: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DeviceItemsViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -112,7 +113,7 @@ fun DeviceItemsScreen(
                 DeviceItemsBody(
                     deviceItemsList = deviceItemsUiState.deviceList,
                     onDevicetSwitch = { viewModel.changeEnableState(it) },
-                    onDevicetClick = {},
+                    onDevicetClick = { navigateToDeviceEdit(it) },
                     onDeviceDelete = { viewModel.deleteDevice(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
