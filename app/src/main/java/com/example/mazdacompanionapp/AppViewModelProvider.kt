@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemAddViewModel
-import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemsViewModel
-import com.example.mazdacompanionapp.screens.EventAddViewModel
-import com.example.mazdacompanionapp.screens.MainViewModel
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemAddViewModel
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemsViewModel
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventAddViewModel
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.MainViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {

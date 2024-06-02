@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.screens.Bluetooth
+package com.example.mazdacompanionapp.ui.screens.Bluetooth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,10 +12,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.primarySurface
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -27,6 +27,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.BluetoothDeviceItem
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemAddViewModel
 import kotlinx.coroutines.launch
 
 object DeviceItemAddScreenDestination : NavigationDestination {
@@ -49,10 +51,10 @@ fun DeviceItemAddScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colors.primarySurface,
-                    titleContentColor = MaterialTheme.colors.primary,
+                    containerColor =  colorScheme.tertiaryContainer,
+                    titleContentColor =  colorScheme.onTertiaryContainer,
                 ),
-                title = { Text(stringResource(id = R.string.deviceItems_add_title)) },
+                title = { Text(stringResource(id = R.string.deviceItems_add_title),color =  colorScheme.onTertiaryContainer) },
                 navigationIcon = {
                     if (canNavigateBack) {
                         IconButton(onClick = onNavigateUp) {
@@ -108,8 +110,8 @@ fun DeviceItem(
         .padding(16.dp)
         .clickable { onClick() }
     ) {
-        Text(text = device.name ?: "Unknown Device", style = MaterialTheme.typography.h6)
-        Text(text = device.address, style = MaterialTheme.typography.body2)
+        Text(text = device.name ?: "Unknown Device", style = MaterialTheme.typography.h6,color = colorScheme.onSurface)
+        Text(text = device.address, style = MaterialTheme.typography.body2,color = colorScheme.onSurface)
     }
 }
 

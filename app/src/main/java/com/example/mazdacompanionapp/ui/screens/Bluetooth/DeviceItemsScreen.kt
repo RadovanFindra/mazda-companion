@@ -1,8 +1,6 @@
-package com.example.mazdacompanionapp.screens.Bluetooth
+package com.example.mazdacompanionapp.ui.screens.Bluetooth
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,11 +17,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.primarySurface
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -47,14 +46,16 @@ import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
-import com.example.mazdacompanionapp.screens.ConfirmDeleteDialog
-import com.example.mazdacompanionapp.screens.DrawerContent
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemsViewModel
+import com.example.mazdacompanionapp.ui.screens.DrawerContent
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ConfirmDeleteDialog
 import kotlinx.coroutines.launch
 
 object DeviceItemsScreenDestination : NavigationDestination {
     override val route = "Devices"
     override val titleRes = R.string.deviceItems_main_title
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceItemsScreen(
@@ -66,60 +67,52 @@ fun DeviceItemsScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            DrawerContent(
-                navController = navController,
-                onDestinationClicked = { route ->
-                    navController.navigate(route) {
-                        launchSingleTop = true
-                    }
-                    coroutineScope.launch {
-                        drawerState.close()
-                    }
-                }
-            )
-        }
-    ) {
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colors.primarySurface,
-                        titleContentColor = MaterialTheme.colors.primary,
-                    ),
-                    title = { Text(stringResource(id = R.string.deviceItems_main_title)) },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            coroutineScope.launch {
-                                drawerState.open()
-                            }
-                        }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
-                        }
-                    }
-                )
-            },
-            floatingActionButton = {
-                FloatingActionButton(onClick = navigateToDeviceAdd,
-                    backgroundColor = MaterialTheme.colors.primarySurface,
-                    contentColor = MaterialTheme.colors.surface
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
-                }
+    ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
+        DrawerContent(navController = navController, onDestinationClicked = { route ->
+            navController.navigate(route) {
+                launchSingleTop = true
             }
-        ) { innerPadding ->
+            coroutineScope.launch {
+                drawerState.close()
+            }
+        })
+    }) {
+        Scaffold(topBar = {
+            CenterAlignedTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = colorScheme.tertiaryContainer,
+                titleContentColor = colorScheme.onTertiaryContainer,
+            ), title = {
+                Text(
+                    stringResource(id = R.string.deviceItems_main_title),
+                    color = colorScheme.onTertiaryContainer
+                )
+            }, navigationIcon = {
+                IconButton(onClick = {
+                    coroutineScope.launch {
+                        drawerState.open()
+                    }
+                }) {
+                    Icon(Icons.Default.Menu, contentDescription = "Menu")
+                }
+            })
+        }, floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToDeviceAdd,
+                backgroundColor = colorScheme.tertiaryContainer,
+                contentColor = colorScheme.onTertiaryContainer
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add")
+            }
+        }) { innerPadding ->
             Column(
-                modifier = Modifier
-                    .padding(innerPadding),
+                modifier = Modifier.padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 val deviceItemsUiState by viewModel.deviceItemsUiState.collectAsState()
                 DeviceItemsBody(
                     deviceItemsList = deviceItemsUiState.deviceList,
-                    onDevicetSwitch = {viewModel.changeEnableState(it)},
-                    onDevicetClick = {  },
+                    onDevicetSwitch = { viewModel.changeEnableState(it) },
+                    onDevicetClick = {},
                     onDeviceDelete = { viewModel.deleteDevice(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -136,7 +129,7 @@ fun DeviceItemsBody(
     onDeviceDelete: (Int) -> Unit,
     modifier: Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-){
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
@@ -167,16 +160,12 @@ fun DeviceItemsList(
     onItemDelete: (Int) -> Unit,
     modifier: Modifier
 ) {
-    LazyColumn(
-        modifier = modifier
-    ) {
+    LazyColumn(modifier = modifier) {
         items(deviceItemsList) { item ->
-            BluetoothItem(
-                item = item,
-                onItemClick = {onItemClick(item.id)},
+            BluetoothItem(item = item,
+                onItemClick = { onItemClick(item.id) },
                 onItemSwitch = { onItemSwitch(item.id) },
-                onItemDelete = { onItemDelete(item.id) }
-            )
+                onItemDelete = { onItemDelete(item.id) })
         }
     }
 }
@@ -191,35 +180,57 @@ fun BluetoothItem(
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
-        ConfirmDeleteDialog(
-            onConfirm = {
-                onItemDelete()
-                showDialog = false
-            },
-            onDismiss = {
-                showDialog = false
-            },
-            "Delete Device?"
+        ConfirmDeleteDialog(onConfirm = {
+            onItemDelete()
+            showDialog = false
+        }, onDismiss = {
+            showDialog = false
+        }, "Delete Device?"
         )
     }
-    Column(modifier = Modifier
-        .padding(16.dp)
+    Column(
+        modifier = Modifier.padding(16.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth()
-            .clickable { onItemClick() }, horizontalArrangement = Arrangement.SpaceBetween) {
-            Box(
-                modifier = Modifier
-            ) {
-                item.name?.let {Text(text = it, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.onPrimary) }
-
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically  // Align items vertically centered
+        ) {
+            item.name?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.h6,
+                    color = colorScheme.onSurface,
+                    modifier = Modifier.align(Alignment.CenterVertically)  // Align Text vertically centered
+                )
             }
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically  // Align items in inner row vertically centered
+            ) {
+                IconButton(
+                    onClick = { onItemClick() }
+                ) {
+                    Icon(
+                        Icons.Default.Edit, contentDescription = "Edit",
+                        tint = colorScheme.onSurface
+                    )
+
+                }
                 Switch(
                     checked = item.isEnabled,
-                    onCheckedChange = { onItemSwitch() }
+                    onCheckedChange = { onItemSwitch() },
+                    modifier = Modifier.align(Alignment.CenterVertically)  // Align Switch vertically centered
                 )
-                IconButton(onClick = { showDialog = true }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete Device")
+                IconButton(
+                    onClick = { showDialog = true },
+                    modifier = Modifier.align(Alignment.CenterVertically)  // Align IconButton vertically centered
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Delete Device",
+                        tint = colorScheme.onSurface
+                    )
                 }
             }
         }

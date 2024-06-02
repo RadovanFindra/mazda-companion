@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.screens
+package com.example.mazdacompanionapp.ui.screens.MainEventScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,6 +48,8 @@ import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
+import com.example.mazdacompanionapp.ui.screens.DrawerContent
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.MainViewModel
 import kotlinx.coroutines.launch
 
 object MainEventScreenDestination : NavigationDestination {
@@ -165,7 +167,7 @@ private fun EventList(
     onEventDelete: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         items(eventList) { event ->
             EventItem(
                 event = event,
@@ -213,8 +215,12 @@ fun EventItem(
                     checked = event.isEnabled,
                     onCheckedChange = { onClick() }
                 )
-                IconButton(onClick = { showDialog = true }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete Event", tint = colorScheme.onSurface)
+                IconButton(
+                    onClick = { showDialog = true }
+                ) {
+                    Icon(Icons.Default.Delete,
+                        contentDescription = "Delete Event",
+                        tint = colorScheme.onSurface)
                 }
             }
         }

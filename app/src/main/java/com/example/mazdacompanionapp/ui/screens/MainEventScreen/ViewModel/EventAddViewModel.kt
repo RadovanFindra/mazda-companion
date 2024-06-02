@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.screens
+package com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

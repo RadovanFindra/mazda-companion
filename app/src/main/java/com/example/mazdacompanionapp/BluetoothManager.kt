@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.compose.runtime.mutableStateListOf
-import com.example.mazdacompanionapp.screens.Bluetooth.BluetoothDeviceItem
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.BluetoothDeviceItem
 
 class MyBluetoothManager(private val context: Context, private val bluetoothService: BluetoothService) {
 

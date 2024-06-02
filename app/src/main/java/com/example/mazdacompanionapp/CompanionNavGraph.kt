@@ -1,5 +1,7 @@
 package com.example.mazdacompanionapp
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -7,14 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.mazdacompanionapp.screens.AddNewEventScreen
-import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemAddScreen
-import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemAddScreenDestination
-import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemsScreen
-import com.example.mazdacompanionapp.screens.Bluetooth.DeviceItemsScreenDestination
-import com.example.mazdacompanionapp.screens.EventAddDestination
-import com.example.mazdacompanionapp.screens.MainEventScreen
-import com.example.mazdacompanionapp.screens.MainEventScreenDestination
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.AddNewEventScreen
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemAddScreen
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemAddScreenDestination
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemsScreen
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemsScreenDestination
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.EventAddDestination
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreen
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreenDestination
 
 
 @Composable
@@ -27,7 +29,8 @@ fun EventNavHost(
         NavHost(
             navController,
             startDestination = MainEventScreenDestination.route,
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding),
+            enterTransition = { fadeIn(animationSpec = tween(300)) }
         ) {
             composable(MainEventScreenDestination.route) {
                 MainEventScreen(

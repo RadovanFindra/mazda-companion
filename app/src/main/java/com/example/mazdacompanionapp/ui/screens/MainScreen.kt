@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.screens
+package com.example.mazdacompanionapp.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 
 import com.example.mazdacompanionapp.NotificationData
 import com.example.mazdacompanionapp.NotificationListener
-import com.example.mazdacompanionapp.screens.Bluetooth.BluetoothDeviceItem
+import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.BluetoothDeviceItem
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

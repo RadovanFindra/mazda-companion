@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.screens
+package com.example.mazdacompanionapp.ui.screens.MainEventScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +43,9 @@ import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.UpdateEvents.Preset
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventAddViewModel
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventDetails
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventUiState
 import kotlinx.coroutines.launch
 
 
