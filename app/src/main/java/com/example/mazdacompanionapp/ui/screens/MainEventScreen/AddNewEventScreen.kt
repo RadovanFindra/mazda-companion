@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -42,7 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
-import com.example.mazdacompanionapp.data.UpdateEvents.Preset
+import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventAddViewModel
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventDetails
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventUiState
@@ -99,13 +101,14 @@ fun AddNewEventScreen(
                     navigateBack()
                 }
             },
+            installedApps = viewModel.eventUiState.installedApps,
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
                     top = innerPadding.calculateTopPadding(),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                 )
-                .verticalScroll(rememberScrollState())
+                //.verticalScroll(rememberScrollState())
                 .fillMaxWidth()
         )
     }
@@ -116,6 +119,7 @@ fun AddNewEventScreen(
 fun AddEventBody(
     eventUiState: EventUiState,
     onEventValueChange: (EventDetails) -> Unit,
+    installedApps: List<String>,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -126,6 +130,7 @@ fun AddEventBody(
         AddForm(
             eventDetails = eventUiState.eventDetails,
             onEventValueChange = onEventValueChange,
+            installedApps = installedApps,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -149,14 +154,16 @@ fun AddEventBody(
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddForm(
     eventDetails: EventDetails,
     modifier: Modifier = Modifier,
     onEventValueChange: (EventDetails) -> Unit = {},
+    installedApps: List<String>,
     enabled: Boolean = true
 ) {
-    var selectedPreset by remember { mutableStateOf<Preset?>(null) }
+    var selectedPreset by remember { mutableStateOf<SEND_EVENT_PRESET?>(null) }
     var expanded by remember { mutableStateOf(false) }
     Column(
         modifier = modifier.padding(16.dp),
@@ -198,7 +205,7 @@ fun AddForm(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    Preset.entries.forEach { preset ->
+                    SEND_EVENT_PRESET.entries.forEach { preset ->
                         DropdownMenuItem(
                             onClick = {
                                 selectedPreset = preset
@@ -213,8 +220,33 @@ fun AddForm(
                 }
             }
         }
+        AppSelector(installedApps = installedApps)
     }
 }
+
+@Composable
+fun AppSelector(
+    installedApps: List<String>,
+) {
+
+    Text(text = installedApps.size.toString(), color = colorScheme.onSurface)
+
+    LazyColumn {
+        items(installedApps) { app ->
+            App(app)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun App(app: String) {
+    ListItem {
+        Text(text = app, color = colorScheme.onSurface)
+    }
+}
+
+
 
 
 

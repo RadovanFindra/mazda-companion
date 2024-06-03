@@ -15,7 +15,8 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             EventAddViewModel(
-                companionApplication().container.eventsRepository
+                companionApplication().container.eventsRepository,
+                this.companionApplication()
             )
         }
         initializer {

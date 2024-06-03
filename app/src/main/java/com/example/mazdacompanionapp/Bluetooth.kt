@@ -1,15 +1,22 @@
 package com.example.mazdacompanionapp
 
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import org.json.JSONObject
 import java.io.OutputStream
 import java.util.UUID
 
 
 
-class BluetoothService {
+class BluetoothService(
+    private val context: Context,
+
+    ) {
 
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private lateinit var bluetoothDevice: BluetoothDevice
@@ -21,9 +28,15 @@ class BluetoothService {
         bluetoothDevice = bluetoothAdapter?.getRemoteDevice(deviceAddress) ?: return
 
         try {
-            bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(MY_UUID)
-            bluetoothSocket.connect()
-            outputStream = bluetoothSocket.outputStream
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(MY_UUID)
+                bluetoothSocket.connect()
+                outputStream = bluetoothSocket.outputStream
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

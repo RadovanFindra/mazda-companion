@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
-import com.example.mazdacompanionapp.data.UpdateEvents.Preset
+import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -37,13 +37,13 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromPreset(value: Preset): String {
+    fun fromPreset(value: SEND_EVENT_PRESET): String {
         return Gson().toJson(value)
     }
 
     @TypeConverter
-    fun toPreset(value: String): Preset {
-        return Gson().fromJson(value, Preset::class.java)
+    fun toPreset(value: String): SEND_EVENT_PRESET {
+        return Gson().fromJson(value, SEND_EVENT_PRESET::class.java)
     }
 }
 

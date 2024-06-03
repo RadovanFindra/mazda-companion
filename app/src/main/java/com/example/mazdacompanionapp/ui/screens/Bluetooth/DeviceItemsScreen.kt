@@ -139,7 +139,8 @@ fun DeviceItemsBody(
             Text(
                 text = stringResource(R.string.empty_device_list),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier.padding(contentPadding),
+                color = colorScheme.onSurface
             )
         } else {
             DeviceItemsList(
@@ -196,18 +197,18 @@ fun BluetoothItem(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically  // Align items vertically centered
+            verticalAlignment = Alignment.CenterVertically
         ) {
             item.name?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.h6,
                     color = colorScheme.onSurface,
-                    modifier = Modifier.align(Alignment.CenterVertically)  // Align Text vertically centered
+                    modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
             Row(
-                verticalAlignment = Alignment.CenterVertically  // Align items in inner row vertically centered
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
                     onClick = { onItemClick() }

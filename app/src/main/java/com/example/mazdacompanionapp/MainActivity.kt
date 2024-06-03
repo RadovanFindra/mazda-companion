@@ -27,10 +27,12 @@ class MainActivity : ComponentActivity() {
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )
 
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkAndRequestPermissions()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -39,7 +41,11 @@ class MainActivity : ComponentActivity() {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
         if (permissionsToRequest.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), REQUEST_CODE)
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsToRequest.toTypedArray(),
+                REQUEST_CODE
+            )
         } else {
             onPermissionsGranted()
         }
@@ -53,8 +59,9 @@ class MainActivity : ComponentActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE) {
-            val deniedPermissions = grantResults.indices.filter { grantResults[it] != PackageManager.PERMISSION_GRANTED }
-                .map { permissions[it] }
+            val deniedPermissions =
+                grantResults.indices.filter { grantResults[it] != PackageManager.PERMISSION_GRANTED }
+                    .map { permissions[it] }
 
             if (deniedPermissions.isEmpty()) {
                 onPermissionsGranted()

@@ -11,7 +11,7 @@ class CompanionApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         container = AppDataContainer(this)
-        bluetoothService = BluetoothService()
+        bluetoothService = BluetoothService(this)
         bluetoothManager = MyBluetoothManager(this, bluetoothService)
         bluetoothManager.initialize()
 
