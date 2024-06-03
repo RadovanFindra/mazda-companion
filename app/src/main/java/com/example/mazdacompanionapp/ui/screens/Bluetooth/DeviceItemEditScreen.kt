@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -85,6 +84,7 @@ fun EditBluetoothItem(
         },
         modifier = modifier,
     ) { innerPadding ->
+
         EditBluetoothItemBody(
             deviceDetails = uiState.deviceDetails,
             onDeviceValueChange = viewModel::updateUiState,
@@ -101,6 +101,7 @@ fun EditBluetoothItem(
                     top = innerPadding.calculateTopPadding(),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                 )
+
         )
     }
 }
@@ -177,6 +178,7 @@ fun DeviceEditForm(
             deviceDetails = deviceDetails,
             onDeviceChange = onDeviceChange
         )
+
     }
 }
 
@@ -187,20 +189,24 @@ fun AssignEvents(
     onDeviceChange: (DeviceDetails) -> Unit
 ) {
     LazyColumn {
-        items(events) { event ->
+        items(count = events.size,
+            key = { events[it].id}) { id ->
+            var event = events.find { event -> event.id == id }
             val containsEvent = deviceDetails.events.contains(event)
-            EventItemAssign(
-                event = event,
-                contains = containsEvent,
-                onCheckedChange = { isChecked ->
-                    val updatedEvents = if (isChecked) {
-                        deviceDetails.events + event
-                    } else {
-                        deviceDetails.events - event
+            if (event != null) {
+                EventItemAssign(
+                    event = event,
+                    contains = containsEvent,
+                    onCheckedChange = { isChecked ->
+                        val updatedEvents = if (isChecked) {
+                            deviceDetails.events + event
+                        } else {
+                            deviceDetails.events - event
+                        }
+                        onDeviceChange(deviceDetails.copy(events = updatedEvents))
                     }
-                    onDeviceChange(deviceDetails.copy(events = updatedEvents))
-                }
-            )
+                )
+            }
         }
     }
 }
