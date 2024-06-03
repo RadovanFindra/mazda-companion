@@ -3,76 +3,70 @@ package com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.content.pm.ResolveInfo
+import android.graphics.Bitmap
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class EventAddViewModel(private val eventsRepository: EventsRepository,
     private val context: Context): ViewModel() {
-var eventUiState by mutableStateOf(EventUiState(installedApps = getInstalledApps(context)))
-    private set
 
-     fun updateUiState(eventDetails: EventDetails) {
-        eventUiState =
-            EventUiState(eventDetails = eventDetails, isAddValid = validateInput(eventDetails), installedApps = getInstalledApps(context = context))
+
+    private val _eventUiState = MutableStateFlow(EventUiState(installedApps = getInstalledApps(context)))
+    val eventUiState: StateFlow<EventUiState> = _eventUiState.asStateFlow()
+
+    fun updateUiState(eventDetails: EventDetails) {
+        _eventUiState.value = _eventUiState.value.copy(eventDetails = eventDetails, isAddValid = validateInput(eventDetails))
     }
+
     suspend fun saveEvent() {
         if (validateInput()) {
-            eventsRepository.insertEvent(eventUiState.eventDetails.toEvent())
+            eventsRepository.insertEvent(eventUiState.value.eventDetails.toEvent())
         }
     }
-    private fun validateInput(uiState: EventDetails = eventUiState.eventDetails): Boolean{
+    private fun validateInput(uiState: EventDetails = eventUiState.value.eventDetails): Boolean{
         return with(uiState) {
             name.isNotBlank()
         }
     }
 
-    private fun getInstalledApps(context: Context): List<String> {
+    private fun getInstalledApps(context: Context): List<AppInfo> {
         val packageManager: PackageManager = context.packageManager
-        val mainIntent = Intent(Intent.ACTION_MAIN, null)
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-
-
-        // get list of all the apps installed
-        val ril = packageManager.queryIntentActivities(mainIntent, 0)
-        val componentList: List<String> = ArrayList()
-        lateinit var name: String
-
-        // get size of ril and create a list
-        val apps = mutableListOf<String>()
-        for (ri in ril) {
-            if (ri.activityInfo != null) {
-                // get package
-                val res = packageManager.getResourcesForApplication(ri.activityInfo.applicationInfo)
-                // if activity label res is found
-                name = if (ri.activityInfo.labelRes != 0) {
-                    res.getString(ri.activityInfo.labelRes)
-                } else {
-                    ri.activityInfo.applicationInfo.loadLabel(packageManager).toString()
-                }
-                    apps.add(name)
-            }
+        val mainIntent = Intent(Intent.ACTION_MAIN, null).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
         }
-        apps.sort()
-        return apps
+        val resolveInfoList: List<ResolveInfo> = packageManager.queryIntentActivities(mainIntent, 0)
+
+        return resolveInfoList.map { resolveInfo ->
+            val appName = resolveInfo.loadLabel(packageManager).toString()
+            val appIcon = resolveInfo.loadIcon(packageManager)
+            AppInfo(name = appName, icon = appIcon.toBitmap())
+        }.sortedBy { it.name }
     }
 }
 
 data class EventUiState(
     val eventDetails: EventDetails = EventDetails(),
     val isAddValid : Boolean = false,
-    val installedApps: List<String>
+    val installedApps: List<AppInfo>
+)
+
+data class AppInfo(
+    val name: String,
+    val icon: Bitmap
 )
 
 data class EventDetails(
     val id: Int = 0,
     val name: String ="",
     var preset: SEND_EVENT_PRESET? = null,
-    val selectedApps: List<String> = emptyList() ,
+    val selectedApps: List<AppInfo> = emptyList() ,
     var isEnabled: Boolean = true
 )
 

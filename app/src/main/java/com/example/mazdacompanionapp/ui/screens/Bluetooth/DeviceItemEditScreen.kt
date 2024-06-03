@@ -122,7 +122,6 @@ fun EditBluetoothItemBody(
             events = events,
             onDeviceChange = onDeviceValueChange
         )
-
         OutlinedButton(
             onClick = onSaveClick,
             colors = ButtonDefaults.outlinedButtonColors(
