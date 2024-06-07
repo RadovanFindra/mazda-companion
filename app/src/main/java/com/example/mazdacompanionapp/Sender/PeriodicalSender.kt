@@ -26,25 +26,33 @@ class PeriodicalSender(private val bluetoothManager: MyBluetoothManager) : Sende
     override fun StartSender() {
         CoroutineScope(Dispatchers.IO).launch {
             enties.forEach { entry ->
-                bluetoothManager.connectToDevice(entry.second.address)
-            }
-            while (enties.isNotEmpty()) {
-                val notifications = NotificationListener.notificationsLiveData
-                val notificationsJson = JSONArray()
-                enties.forEach { entry ->
-                    notifications.value?.forEach { notificationData ->
-                        if (entry.first.selectedApps.find { appInfo -> appInfo.name == notificationData.appName } != null) {
-                            val jsonObject = JSONObject().apply {
-                                put("appName", notificationData.appName)
-                                put("title", notificationData.title)
-                                put("text", notificationData.text)
+                if(!bluetoothManager.isDeviceConnected(entry.second.address)) {
+                    bluetoothManager.connectToDevice(entry.second.address)
+                }
+
+                while (enties.isNotEmpty()) {
+                    val notifications = NotificationListener.notificationsLiveData
+                    val notificationsJson = JSONArray()
+                    enties.forEach { entry ->
+                        notifications.value?.forEach { notificationData ->
+                            if (entry.first.selectedApps.find { appInfo -> appInfo.name == notificationData.appName } != null) {
+                                val jsonObject = JSONObject().apply {
+                                    put("appName", notificationData.appName)
+                                    put("title", notificationData.title)
+                                    put("text", notificationData.text)
+                                }
+                                notificationsJson.put(jsonObject)
                             }
-                            notificationsJson.put(jsonObject)
                         }
                     }
+                    bluetoothManager.sendData(entry.second.address,JSONObject().apply {
+                        put(
+                            "notifications",
+                            notificationsJson
+                        )
+                    })
+                    delay(6000)
                 }
-                bluetoothManager.sendData(JSONObject().apply { put("notifications", notificationsJson) })
-                delay(6000)
             }
         }
     }

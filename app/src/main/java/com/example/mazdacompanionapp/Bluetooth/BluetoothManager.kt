@@ -65,7 +65,14 @@ class MyBluetoothManager(
     }
 
     fun sendData(data: JSONObject) {
-        bluetoothService.sendData(data)
+        bluetoothService.sendDataToAll(data)
+    }
+
+    fun sendData(deviceAddress: String ,data: JSONObject) {
+        bluetoothService.sendDataToDevice(deviceAddress, data)
+    }
+    fun isDeviceConnected(deviceAddress: String): Boolean {
+    return bluetoothService.isDeviceConnected(deviceAddress)
     }
 
     private val receiver = object : BroadcastReceiver() {
