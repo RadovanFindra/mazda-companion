@@ -74,11 +74,14 @@ class NotificationListener : NotificationListenerService() {
     }
 
     companion object {
+        // Initialize notificationsLiveData to an empty MutableLiveData
         val notificationsLiveData: MutableLiveData<List<NotificationData>> = MutableLiveData()
 
         fun notificationsToJson(): JSONObject {
+            val notificationsList = notificationsLiveData.value ?: emptyList()
+
             val jsonArray = JSONArray()
-            for (notification in notificationsLiveData.value!!) {
+            for (notification in notificationsList) {
                 val jsonObject = JSONObject().apply {
                     put("appName", notification.appName)
                     put("title", notification.title)

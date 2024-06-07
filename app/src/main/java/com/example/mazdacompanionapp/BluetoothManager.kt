@@ -12,6 +12,7 @@ import android.content.pm.PackageManager
 import androidx.compose.runtime.mutableStateListOf
 import androidx.core.app.ActivityCompat
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.BluetoothDeviceItem
+import org.json.JSONObject
 
 class MyBluetoothManager(
     private val context: Context,
@@ -28,8 +29,6 @@ class MyBluetoothManager(
     fun initialize() {
         registerReceiver()
     }
-
-
 
     private fun registerReceiver() {
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
@@ -61,8 +60,12 @@ class MyBluetoothManager(
         }
     }
 
-    fun connectToDevice(device: BluetoothDeviceItem) {
-        bluetoothService.connectToBluetoothDevice(device.address)
+    fun connectToDevice(address: String) {
+        bluetoothService.connectToBluetoothDevice(address)
+    }
+
+    fun sendData(data: JSONObject) {
+        bluetoothService.sendData(data)
     }
 
     private val receiver = object : BroadcastReceiver() {

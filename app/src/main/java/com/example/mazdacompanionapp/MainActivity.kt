@@ -1,8 +1,11 @@
 package com.example.mazdacompanionapp
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -11,8 +14,12 @@ import androidx.compose.material.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +39,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkAndRequestPermissions()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -47,6 +53,22 @@ class MainActivity : ComponentActivity() {
                 REQUEST_CODE
             )
         } else {
+            checkAllPermissionsGranted()
+        }
+    }
+
+    private fun checkAllPermissionsGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
+                Toast.makeText(this, "Please grant notification access and restart App", Toast.LENGTH_LONG).show()
+                val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+                startActivity(intent)
+            } else {
+                // All permissions granted
+                onPermissionsGranted()
+            }
+        } else {
+            // For devices below Android M, assume notification permission is granted
             onPermissionsGranted()
         }
     }
@@ -64,7 +86,7 @@ class MainActivity : ComponentActivity() {
                     .map { permissions[it] }
 
             if (deniedPermissions.isEmpty()) {
-                onPermissionsGranted()
+                checkAllPermissionsGranted()
             } else {
                 onPermissionsDenied(deniedPermissions)
             }
@@ -72,6 +94,16 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onPermissionsGranted() {
+        val app = application as CompanionApplication
+        val bluetoothSender = BluetoothSender(app.container.deviceItemsRepository, app.bluetoothManager)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            bluetoothSender.devices.collect { deviceList ->
+                if (deviceList.isNotEmpty()) {
+                    bluetoothSender.sendToDevices()
+                }
+            }
+        }
         setContent {
             MazdaCompanionAppTheme {
                 Surface(
@@ -85,7 +117,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onPermissionsDenied(deniedPermissions: List<String>) {
-
+        // Handle denied permissions here
     }
 
     companion object {
