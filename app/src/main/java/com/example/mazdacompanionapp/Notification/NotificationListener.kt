@@ -36,6 +36,7 @@ class NotificationListener : NotificationListenerService() {
 
         for (notification in activeNotifications) {
             val notificationData = extractNotificationData(notification)
+
             newNotifications.add(notificationData)
         }
 
@@ -74,7 +75,7 @@ class NotificationListener : NotificationListenerService() {
     }
 
     companion object {
-        // Initialize notificationsLiveData to an empty MutableLiveData
+
         val notificationsLiveData: MutableLiveData<List<NotificationData>> = MutableLiveData()
 
         fun notificationsToJson(): JSONObject {

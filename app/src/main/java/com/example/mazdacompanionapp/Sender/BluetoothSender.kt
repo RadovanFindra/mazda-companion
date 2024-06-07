@@ -3,7 +3,6 @@ package com.example.mazdacompanionapp.Sender
 import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
-import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,8 @@ class BluetoothSender(
 ) {
     private val _devices = MutableStateFlow<List<DeviceItem>>(emptyList())
     val devices: StateFlow<List<DeviceItem>> = _devices.asStateFlow()
-    val periodicalDevices: MutableList<Pair<Event, DeviceItem>> = mutableListOf()
+    val periodicSender:PeriodicalSender = PeriodicalSender(bluetoothManager)
+
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -26,7 +26,6 @@ class BluetoothSender(
                 _devices.value = deviceItems
             }
         }
-        bluetoothManager.connectToDevice("24:DC:C3:45:F3:36")
     }
 
     fun startSending() {
@@ -35,9 +34,9 @@ class BluetoothSender(
                 deviceItem.events.forEach { event ->
                     if (event.isEnabled) {
                         when (event.preset) {
-                            SEND_EVENT_PRESET.DEFAULT -> schedulePeriodicSend(deviceItem, event)
-                            SEND_EVENT_PRESET.ON_CONNECT -> sendOnConnect(deviceItem, event)
-                            SEND_EVENT_PRESET.ON_NOTIFICATION_CHANCE -> sendOnNotificationChange(deviceItem, event)
+                            SEND_EVENT_PRESET.DEFAULT ->periodicSender.AddToSender(event, deviceItem)
+                            SEND_EVENT_PRESET.ON_CONNECT -> println()
+                            SEND_EVENT_PRESET.ON_NOTIFICATION_CHANCE -> println()
                             else -> {
                                 // Handle other presets if necessary
                             }
@@ -46,22 +45,10 @@ class BluetoothSender(
                 }
             }
         }
+        periodicSender.StartSender()
     }
 
-    fun schedulePeriodicSend(deviceItem: DeviceItem, event: Event) {
-        println("Scheduling periodic send for device ${deviceItem.name} (${deviceItem.address}) for event ${event.name}")
-        periodicalDevices.add(Pair(event, deviceItem))
-    }
 
-    fun sendOnConnect(deviceItem: DeviceItem, event: Event) {
-        println("Setting up send on connect for device ${deviceItem.name} (${deviceItem.address}) for event ${event.name}")
-
-    }
-
-    fun sendOnNotificationChange(deviceItem: DeviceItem, event: Event) {
-        println("Setting up send on notification change for device ${deviceItem.name} (${deviceItem.address}) for event ${event.name}")
-
-    }
 
 //    fun startPeriodicDataSend() {
 //        CoroutineScope(Dispatchers.IO).launch {

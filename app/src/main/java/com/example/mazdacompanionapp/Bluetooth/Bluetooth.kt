@@ -47,6 +47,7 @@ class BluetoothService(
             outputStream.write(data.toString().toByteArray())
         } catch (e: Exception) {
             e.printStackTrace()
+
         }
     }
 }

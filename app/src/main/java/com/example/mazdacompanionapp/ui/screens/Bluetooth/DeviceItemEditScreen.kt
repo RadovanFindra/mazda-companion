@@ -191,7 +191,7 @@ fun AssignEvents(
 ) {
     LazyColumn {
         items(events) { event ->
-            val containsEvent = deviceDetails.events.contains(event)
+            val containsEvent = deviceDetails.events.find { event1 -> event1.id == event.id }!=null
             EventItemAssign(
                 event = event,
                 contains = containsEvent,
@@ -199,7 +199,7 @@ fun AssignEvents(
                     val updatedEvents = if (isChecked) {
                         deviceDetails.events + event
                     } else {
-                        deviceDetails.events - event
+                        deviceDetails.events.filter { it.id != event.id }
                     }
                     onDeviceChange(deviceDetails.copy(events = updatedEvents))
                 }
