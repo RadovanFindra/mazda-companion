@@ -13,4 +13,5 @@ class OfflineDeviceItemsRepository(private val deviceItemDao: DeviceItemDao) : D
     override suspend fun deleteDeviceItem(deviceItem: DeviceItem) = deviceItemDao.delete(deviceItem)
 
     override suspend fun updateDeviceItem(deviceItem: DeviceItem) = deviceItemDao.update(deviceItem)
+
 }

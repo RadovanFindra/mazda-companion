@@ -21,7 +21,8 @@ object AppViewModelProvider {
         }
         initializer {
             MainViewModel(
-                companionApplication().container.eventsRepository
+                companionApplication().container.eventsRepository,
+                companionApplication().container.deviceItemsRepository
             )
         }
         initializer {

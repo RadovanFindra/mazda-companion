@@ -2,6 +2,7 @@ package com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,7 +12,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class MainViewModel( private val eventsRepository: EventsRepository) : ViewModel() {
+class MainViewModel(
+    private val eventsRepository: EventsRepository,
+    private val devicesRepository: DeviceItemsRepository
+) : ViewModel() {
 
     val mainUiState: StateFlow<MainUiState> =
         eventsRepository.getAllEventsStream().map { MainUiState(it) }
@@ -35,6 +39,14 @@ class MainViewModel( private val eventsRepository: EventsRepository) : ViewModel
         viewModelScope.launch {
             val event = eventsRepository.getEventStream(id).firstOrNull()
             event?.let {
+                val devices = devicesRepository.getAllDeviceItemsStream().firstOrNull() ?: emptyList()
+                val updatedDevices = devices.map { device ->
+                    val updatedEvents = device.events.filter { it.id != event.id }
+                    device.copy(events = updatedEvents.toMutableList())
+                }
+                updatedDevices.forEach { device ->
+                    devicesRepository.updateDeviceItem(device)
+                }
                 eventsRepository.deleteEvent(event)
             }
         }

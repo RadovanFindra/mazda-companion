@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -189,24 +190,20 @@ fun AssignEvents(
     onDeviceChange: (DeviceDetails) -> Unit
 ) {
     LazyColumn {
-        items(count = events.size,
-            key = { events[it].id}) { id ->
-            var event = events.find { event -> event.id == id }
+        items(events) { event ->
             val containsEvent = deviceDetails.events.contains(event)
-            if (event != null) {
-                EventItemAssign(
-                    event = event,
-                    contains = containsEvent,
-                    onCheckedChange = { isChecked ->
-                        val updatedEvents = if (isChecked) {
-                            deviceDetails.events + event
-                        } else {
-                            deviceDetails.events - event
-                        }
-                        onDeviceChange(deviceDetails.copy(events = updatedEvents))
+            EventItemAssign(
+                event = event,
+                contains = containsEvent,
+                onCheckedChange = { isChecked ->
+                    val updatedEvents = if (isChecked) {
+                        deviceDetails.events + event
+                    } else {
+                        deviceDetails.events - event
                     }
-                )
-            }
+                    onDeviceChange(deviceDetails.copy(events = updatedEvents))
+                }
+            )
         }
     }
 }

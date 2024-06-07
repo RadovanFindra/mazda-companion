@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -168,16 +169,12 @@ fun EventList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        items(count = eventList.size,
-            key = { eventList[it].id}) { id ->
-            val event = eventList.find { event -> event.id == id }
-            if (event != null) {
-                EventItem(
-                    event = event,
-                    onClick = { onEventClick(event.id) },
-                    onDeleteClick = { onEventDelete(event.id) }
-                )
-            }
+        items(eventList) { event ->
+            EventItem(
+                event = event,
+                onClick = { onEventClick(event.id) },
+                onDeleteClick = { onEventDelete(event.id) }
+            )
         }
     }
 }
@@ -256,4 +253,3 @@ fun ConfirmDeleteDialog(
         }
     )
 }
-
