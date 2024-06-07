@@ -1,6 +1,8 @@
 package com.example.mazdacompanionapp
 
 import android.app.Application
+import com.example.mazdacompanionapp.Bluetooth.BluetoothService
+import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
 import com.example.mazdacompanionapp.data.AppDataContainer
 
 class CompanionApplication : Application() {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.ui.Navigation
 
 /**
  * Interface to describe the navigation destinations for the app

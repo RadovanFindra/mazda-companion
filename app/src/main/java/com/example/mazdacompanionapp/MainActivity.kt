@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.example.mazdacompanionapp.Sender.BluetoothSender
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -100,7 +101,7 @@ class MainActivity : ComponentActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             bluetoothSender.devices.collect { deviceList ->
                 if (deviceList.isNotEmpty()) {
-                    bluetoothSender.sendToDevices()
+                    bluetoothSender.startSending()
                 }
             }
         }
@@ -130,15 +131,7 @@ class MainActivity : ComponentActivity() {
 //        bluetoothService.sendData(json)
 //    }
 //
-//    private fun startPeriodicDataSend() {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            while (true) {
-//                delay(60000) // 1 minute
-//                val data = JSONObject().put("preset", "default").put("timestamp", System.currentTimeMillis())
-//                bluetoothService.sendData(data)
-//            }
-//        }
-//    }
+
 
 
 

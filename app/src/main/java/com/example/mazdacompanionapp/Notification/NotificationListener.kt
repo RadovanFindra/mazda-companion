@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.Notification
 
 import android.app.Notification
 import android.content.pm.PackageManager

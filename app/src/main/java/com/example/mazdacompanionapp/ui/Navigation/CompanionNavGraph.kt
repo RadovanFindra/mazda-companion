@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.ui.Navigation
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn

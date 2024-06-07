@@ -35,9 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mazdacompanionapp.AppViewModelProvider
-import com.example.mazdacompanionapp.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
+import com.example.mazdacompanionapp.ui.Navigation.NavigationDestination
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceDetails
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemEditViewModel
 import kotlinx.coroutines.launch

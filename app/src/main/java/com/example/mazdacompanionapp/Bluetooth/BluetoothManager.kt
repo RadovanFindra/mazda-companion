@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.Bluetooth
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter

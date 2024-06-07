@@ -1,13 +1,14 @@
 package com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.example.mazdacompanionapp.MyBluetoothManager
+import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
 
 class DeviceItemAddViewModel(
     private val deviceItemsRepository: DeviceItemsRepository,
-    bluetoothManager: MyBluetoothManager): ViewModel() {
+    bluetoothManager: MyBluetoothManager
+): ViewModel() {
 
     var bluetoothManager: MyBluetoothManager = bluetoothManager
         private set

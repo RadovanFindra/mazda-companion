@@ -46,7 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mazdacompanionapp.AppViewModelProvider
-import com.example.mazdacompanionapp.NavigationDestination
+import com.example.mazdacompanionapp.ui.Navigation.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.AppInfo

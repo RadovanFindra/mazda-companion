@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.mazdacompanionapp.AppViewModelProvider
-import com.example.mazdacompanionapp.NavigationDestination
+import com.example.mazdacompanionapp.ui.Navigation.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemsViewModel

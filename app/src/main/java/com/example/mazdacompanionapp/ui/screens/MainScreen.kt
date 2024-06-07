@@ -18,8 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-import com.example.mazdacompanionapp.NotificationData
-import com.example.mazdacompanionapp.NotificationListener
+import com.example.mazdacompanionapp.Notification.NotificationData
+import com.example.mazdacompanionapp.Notification.NotificationListener
 import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.BluetoothDeviceItem
 import java.text.SimpleDateFormat
 import java.util.Date
