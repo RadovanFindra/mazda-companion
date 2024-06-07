@@ -10,9 +10,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.concurrent.CopyOnWriteArrayList
 
 class PeriodicalSender(private val bluetoothManager: MyBluetoothManager) : Sender {
-    val enties: MutableList<Pair<Event, DeviceItem>> = mutableListOf()
+    private val enties: MutableList<Pair<Event, DeviceItem>> = CopyOnWriteArrayList()
 
     override fun AddToSender(event: Event, deviceItem: DeviceItem) {
         enties.add(Pair(event, deviceItem))
@@ -44,7 +45,6 @@ class PeriodicalSender(private val bluetoothManager: MyBluetoothManager) : Sende
                 }
                 bluetoothManager.sendData(JSONObject().apply { put("notifications", notificationsJson) })
                 delay(6000)
-
             }
         }
     }
