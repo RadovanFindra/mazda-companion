@@ -58,15 +58,17 @@ class MainActivity : ComponentActivity() {
     private fun checkAllPermissionsGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
-                Toast.makeText(this, "Please grant notification access and restart App", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "Please grant notification access and restart App",
+                    Toast.LENGTH_LONG
+                ).show()
                 val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
                 startActivity(intent)
             } else {
-                // All permissions granted
                 onPermissionsGranted()
             }
         } else {
-            // For devices below Android M, assume notification permission is granted
             onPermissionsGranted()
         }
     }
@@ -93,7 +95,12 @@ class MainActivity : ComponentActivity() {
 
     private fun onPermissionsGranted() {
         val app = application as CompanionApplication
-        val bluetoothSender = BluetoothSender(app.container.deviceItemsRepository,app.container.eventsRepository, app.bluetoothManager)
+        val bluetoothSender = BluetoothSender(
+            app.container.deviceItemsRepository,
+            app.container.eventsRepository,
+            app.phoneInfoManager,
+            app.bluetoothManager
+        )
 
 
         setContent {

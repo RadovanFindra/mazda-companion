@@ -71,8 +71,12 @@ class BluetoothService(
         val index = bluetoothDevices.indexOfFirst { it.address == deviceAddress }
         if (index != -1) {
             try {
-                val dataBytes = data.toString().toByteArray()
+                val dataBytes = (data.toString() + "\n").toByteArray()
                 outputStreams[index].write(dataBytes)
+            } catch (e: java.io.IOException) {
+                e.printStackTrace()
+                println("Broken pipe error occurred. Updating connection status.")
+                connectionStatus[deviceAddress] = false
             } catch (e: Exception) {
                 e.printStackTrace()
             }

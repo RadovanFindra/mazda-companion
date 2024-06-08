@@ -22,6 +22,11 @@ class NotificationListener : NotificationListenerService() {
         fetchExistingNotifications()
     }
 
+    override fun onListenerDisconnected() {
+        super.onListenerDisconnected()
+        // Handle disconnection if necessary
+    }
+
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         refreshNotificationList()
     }
@@ -34,10 +39,11 @@ class NotificationListener : NotificationListenerService() {
         val activeNotifications = activeNotifications
         val newNotifications = mutableListOf<NotificationData>()
 
-        for (notification in activeNotifications) {
-            val notificationData = extractNotificationData(notification)
-
-            newNotifications.add(notificationData)
+        if (activeNotifications != null) {
+            for (notification in activeNotifications) {
+                val notificationData = extractNotificationData(notification)
+                newNotifications.add(notificationData)
+            }
         }
 
         notificationsLiveData.postValue(newNotifications.toList())
@@ -46,7 +52,6 @@ class NotificationListener : NotificationListenerService() {
     private fun refreshNotificationList() {
         fetchExistingNotifications()
     }
-
 
     private fun extractNotificationData(sbn: StatusBarNotification): NotificationData {
         val notification = sbn.notification
@@ -75,7 +80,6 @@ class NotificationListener : NotificationListenerService() {
     }
 
     companion object {
-
         val notificationsLiveData: MutableLiveData<List<NotificationData>> = MutableLiveData()
 
         fun notificationsToJson(): JSONObject {

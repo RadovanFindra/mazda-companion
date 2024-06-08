@@ -1,6 +1,7 @@
 package com.example.mazdacompanionapp.Sender
 
 import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
+import com.example.mazdacompanionapp.PhoneInfoManager
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
@@ -15,11 +16,12 @@ import kotlinx.coroutines.launch
 class BluetoothSender(
     private val deviceItemsRepository: DeviceItemsRepository,
     eventsRepository: EventsRepository,
+    phoneInfoManager: PhoneInfoManager,
     bluetoothManager: MyBluetoothManager
 ) {
     private val _devices = MutableStateFlow<List<DeviceItem>>(emptyList())
     val devices = _devices.asStateFlow()
-    private val periodicSender: Sender = PeriodicalSender(bluetoothManager)
+    private val periodicSender: Sender = PeriodicalSender(bluetoothManager, phoneInfoManager)
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -50,11 +52,12 @@ class BluetoothSender(
                     }
                 }
 
-                if (deviceItem.isEnabled && event.isEnabled) {
-                    sender.AddToSender(deviceItem)
-                } else {
-                    sender.RemoveFromSender(deviceItem)
-                }
+
+            }
+            if (deviceItem.isEnabled) {
+                sender.AddToSender(deviceItem)
+            } else {
+                sender.RemoveFromSender(deviceItem)
             }
         }
     }
