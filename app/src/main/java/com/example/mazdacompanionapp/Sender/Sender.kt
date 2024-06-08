@@ -4,9 +4,9 @@ import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 
 interface Sender {
-    fun AddToSender(event: Event,deviceItem: DeviceItem)
-    fun RemoveFromSender(event: Event,deviceItem: DeviceItem)
+    fun AddToSender(entry: Pair<Event, DeviceItem>)
+    fun RemoveFromSender(entry: Pair<Event, DeviceItem>)
 
-    fun StartSender()
+    fun Send()
 
 }

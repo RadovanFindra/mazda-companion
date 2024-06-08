@@ -7,7 +7,6 @@ import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -16,38 +15,39 @@ class BluetoothSender(
     private val bluetoothManager: MyBluetoothManager
 ) {
     private val _devices = MutableStateFlow<List<DeviceItem>>(emptyList())
-    val devices: StateFlow<List<DeviceItem>> = _devices.asStateFlow()
-    val periodicSender:PeriodicalSender = PeriodicalSender(bluetoothManager)
-
+    val devices = _devices.asStateFlow()
+    private val periodicSender: Sender = PeriodicalSender(bluetoothManager)
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
             deviceItemsRepository.getAllDeviceItemsStream().collect { deviceItems ->
                 _devices.value = deviceItems
+                startSending() // Call startSending whenever device database changes
             }
         }
     }
 
-    fun startSending() {
-        devices.value.forEach { deviceItem ->
-            if (deviceItem.isEnabled) {
-                deviceItem.events.forEach { event ->
-                    if (event.isEnabled) {
-                        when (event.preset) {
-                            SEND_EVENT_PRESET.DEFAULT ->periodicSender.AddToSender(event, deviceItem)
-                            SEND_EVENT_PRESET.ON_CONNECT -> println()
-                            SEND_EVENT_PRESET.ON_NOTIFICATION_CHANCE -> println()
-                            else -> {
-                                // Handle other presets if necessary
-                            }
-                        }
+    private fun startSending() {
+        var sender: Sender = periodicSender
+        for (deviceItem in devices.value) {
+            for (event in deviceItem.events) {
+                when (event.preset) {
+                    SEND_EVENT_PRESET.DEFAULT -> sender = periodicSender
+                    SEND_EVENT_PRESET.ON_CONNECT -> println()
+                    SEND_EVENT_PRESET.ON_NOTIFICATION_CHANCE -> println()
+                    else -> {
                     }
+                }
+                val temp = Pair(event, deviceItem)
+                if (deviceItem.isEnabled && event.isEnabled) {
+                    sender.AddToSender(temp)
+                } else {
+                    sender.RemoveFromSender(temp)
                 }
             }
         }
-        periodicSender.StartSender()
     }
-
+}
 
 
 //    fun startPeriodicDataSend() {
@@ -67,4 +67,3 @@ class BluetoothSender(
 //            }
 //        }
 //    }
-}

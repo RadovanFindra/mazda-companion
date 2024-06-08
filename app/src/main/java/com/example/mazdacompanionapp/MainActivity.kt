@@ -18,9 +18,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.example.mazdacompanionapp.Sender.BluetoothSender
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -98,13 +95,7 @@ class MainActivity : ComponentActivity() {
         val app = application as CompanionApplication
         val bluetoothSender = BluetoothSender(app.container.deviceItemsRepository, app.bluetoothManager)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            bluetoothSender.devices.collect { deviceList ->
-                if (deviceList.isNotEmpty()) {
-                    bluetoothSender.startSending()
-                }
-            }
-        }
+
         setContent {
             MazdaCompanionAppTheme {
                 Surface(
