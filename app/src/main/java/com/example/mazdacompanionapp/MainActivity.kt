@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
 
     private fun onPermissionsGranted() {
         val app = application as CompanionApplication
-        val bluetoothSender = BluetoothSender(app.container.deviceItemsRepository, app.bluetoothManager)
+        val bluetoothSender = BluetoothSender(app.container.deviceItemsRepository,app.container.eventsRepository, app.bluetoothManager)
 
 
         setContent {

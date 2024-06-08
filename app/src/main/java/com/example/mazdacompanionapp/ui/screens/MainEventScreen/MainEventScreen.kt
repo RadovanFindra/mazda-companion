@@ -122,7 +122,7 @@ fun MainEventScreen(
             ) {
                 MainBody(
                     eventList = mainUiState.eventList,
-                    onEventClick = { viewModel.changeEnableState(it) },
+                    onEventCheck = { viewModel.changeEnableState(it) },
                     onEventDelete = { viewModel.deleteEvent(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -134,7 +134,7 @@ fun MainEventScreen(
 @Composable
 private fun MainBody(
     eventList: List<Event>,
-    onEventClick: (Int) -> Unit,
+    onEventCheck: (Int) -> Unit,
     onEventDelete: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -153,7 +153,7 @@ private fun MainBody(
         } else {
             EventList(
                 eventList = eventList,
-                onEventClick = onEventClick,
+                onEventCheck = onEventCheck,
                 onEventDelete = onEventDelete,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
@@ -164,7 +164,7 @@ private fun MainBody(
 @Composable
 fun EventList(
     eventList: List<Event>,
-    onEventClick: (Int) -> Unit,
+    onEventCheck: (Int) -> Unit,
     onEventDelete: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -172,7 +172,7 @@ fun EventList(
         items(eventList) { event ->
             EventItem(
                 event = event,
-                onClick = { onEventClick(event.id) },
+                onCheck = { onEventCheck(event.id) },
                 onDeleteClick = { onEventDelete(event.id) }
             )
         }
@@ -183,7 +183,7 @@ fun EventList(
 fun EventItem(
     event: Event,
     onDeleteClick: () -> Unit,
-    onClick: () -> Unit
+    onCheck: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -214,7 +214,7 @@ fun EventItem(
             Row {
                 Switch(
                     checked = event.isEnabled,
-                    onCheckedChange = { onClick() }
+                    onCheckedChange = { onCheck() }
                 )
                 IconButton(
                     onClick = { showDialog = true }

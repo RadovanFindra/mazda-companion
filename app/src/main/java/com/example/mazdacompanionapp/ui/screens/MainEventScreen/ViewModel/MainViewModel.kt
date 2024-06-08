@@ -31,6 +31,18 @@ class MainViewModel(
             event?.let {
                 val updatedEvent = it.copy(isEnabled = !it.isEnabled)
                 eventsRepository.updateEvent(updatedEvent)
+
+                // Update the event state in the devices repository
+                val devices = devicesRepository.getAllDeviceItemsStream().firstOrNull() ?: emptyList()
+                val updatedDevices = devices.map { device ->
+                    val updatedEvents = device.events.map { evt ->
+                        if (evt.id == updatedEvent.id) updatedEvent else evt
+                    }
+                    device.copy(events = updatedEvents.toMutableList())
+                }
+                updatedDevices.forEach { device ->
+                    devicesRepository.updateDeviceItem(device)
+                }
             }
         }
     }

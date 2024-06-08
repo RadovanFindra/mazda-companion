@@ -3,16 +3,19 @@ package com.example.mazdacompanionapp.Sender
 import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
+import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class BluetoothSender(
     private val deviceItemsRepository: DeviceItemsRepository,
-    private val bluetoothManager: MyBluetoothManager
+    eventsRepository: EventsRepository,
+    bluetoothManager: MyBluetoothManager
 ) {
     private val _devices = MutableStateFlow<List<DeviceItem>>(emptyList())
     val devices = _devices.asStateFlow()
@@ -20,7 +23,12 @@ class BluetoothSender(
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            deviceItemsRepository.getAllDeviceItemsStream().collect { deviceItems ->
+            combine(
+                deviceItemsRepository.getAllDeviceItemsStream(),
+                eventsRepository.getAllEventsStream()
+            ) { deviceItems, events ->
+                Pair(deviceItems, events)
+            }.collect { (deviceItems, events) ->
                 _devices.value = deviceItems
                 startSending()
             }
