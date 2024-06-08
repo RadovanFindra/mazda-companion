@@ -22,15 +22,18 @@ class BluetoothSender(
         CoroutineScope(Dispatchers.IO).launch {
             deviceItemsRepository.getAllDeviceItemsStream().collect { deviceItems ->
                 _devices.value = deviceItems
-                startSending() // Call startSending whenever device database changes
+                startSending()
             }
         }
     }
 
     private fun startSending() {
         var sender: Sender = periodicSender
+
         for (deviceItem in devices.value) {
+
             for (event in deviceItem.events) {
+
                 when (event.preset) {
                     SEND_EVENT_PRESET.DEFAULT -> sender = periodicSender
                     SEND_EVENT_PRESET.ON_CONNECT -> println()
@@ -38,11 +41,11 @@ class BluetoothSender(
                     else -> {
                     }
                 }
-                val temp = Pair(event, deviceItem)
+
                 if (deviceItem.isEnabled && event.isEnabled) {
-                    sender.AddToSender(temp)
+                    sender.AddToSender(deviceItem)
                 } else {
-                    sender.RemoveFromSender(temp)
+                    sender.RemoveFromSender(deviceItem)
                 }
             }
         }

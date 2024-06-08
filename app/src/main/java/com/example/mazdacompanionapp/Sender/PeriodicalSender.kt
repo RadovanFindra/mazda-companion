@@ -3,7 +3,6 @@ package com.example.mazdacompanionapp.Sender
 import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
 import com.example.mazdacompanionapp.Notification.NotificationListener
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
-import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -13,22 +12,19 @@ import org.json.JSONObject
 import java.util.concurrent.CopyOnWriteArrayList
 
 class PeriodicalSender(private val bluetoothManager: MyBluetoothManager) : Sender {
-    private val enties: MutableList<Pair<Event, DeviceItem>> = CopyOnWriteArrayList()
+    private val enties: MutableList<DeviceItem> = CopyOnWriteArrayList()
 
-    override fun AddToSender(entry: Pair<Event, DeviceItem>) {
-        val (event, deviceItem) = entry
-        val exists = enties.any { it.first.id == event.id && it.second.id == deviceItem.id }
-        if (!exists) {
-            enties.add(entry)
+    override fun AddToSender(deviceItem: DeviceItem) {
+        val index = enties.indexOfFirst { it.id == deviceItem.id }
+        if (index != -1) {
+            enties[index] = deviceItem
+        } else {
+            enties.add(deviceItem)
         }
     }
 
-    override fun RemoveFromSender(entry: Pair<Event, DeviceItem>) {
-        val (event, deviceItem) = entry
-        val entryToRemove = enties.find { it.first.id == event.id && it.second.id == deviceItem.id }
-        entryToRemove?.let {
-            enties.remove(it)
-        }
+    override fun RemoveFromSender(deviceItem: DeviceItem) {
+        enties.removeIf { it.id == deviceItem.id }
     }
     init {
         Send()
@@ -37,31 +33,30 @@ class PeriodicalSender(private val bluetoothManager: MyBluetoothManager) : Sende
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
                 println(enties.size)
-
-                enties.forEach { entry ->
-                    if (entry.second.isEnabled) {
-                        if (!bluetoothManager.isDeviceConnected(entry.second.address)) {
-                            bluetoothManager.connectToDevice(entry.second.address)
+                for (entry in enties){
+                    if (entry.isEnabled) {
+                        if (!bluetoothManager.isDeviceConnected(entry.address)) {
+                            bluetoothManager.connectToDevice(entry.address)
                         }
-                        val notifications = NotificationListener.notificationsLiveData
+                        val notifications = NotificationListener.notificationsLiveData.value
                         val notificationsJson = JSONArray()
-
-                        notifications.value?.forEach { notificationData ->
-                            if (entry.first.selectedApps.find { appInfo -> appInfo.name == notificationData.appName } != null) {
-                                val jsonObject = JSONObject().apply {
-                                    put("appName", notificationData.appName)
-                                    put("title", notificationData.title)
-                                    put("text", notificationData.text)
+                        if (notifications != null) {
+                            for (notificationData in notifications) {
+                                for (event in entry.events) {
+                                    if (event.selectedApps.find { appInfo -> appInfo.name == notificationData.appName } != null && event.isEnabled) {
+                                        val jsonObject = JSONObject().apply {
+                                            put("appName", notificationData.appName)
+                                            put("title", notificationData.title)
+                                            put("text", notificationData.text)
+                                        }
+                                        notificationsJson.put(jsonObject)
+                                    }
                                 }
-                                notificationsJson.put(jsonObject)
                             }
                         }
-                        bluetoothManager.sendData(entry.second.address, JSONObject().apply {
-                            put(
-                                "notifications",
-                                notificationsJson
-                            )
-                        })
+                        val sendJson:JSONObject = JSONObject().apply { put("notifications", notificationsJson) }
+                        bluetoothManager.sendData(entry.address, sendJson)
+
                     }
 
                 }
