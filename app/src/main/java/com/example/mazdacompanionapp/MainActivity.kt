@@ -1,5 +1,6 @@
 package com.example.mazdacompanionapp
 
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,8 +15,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.example.mazdacompanionapp.Notification.NotificationListener
 import com.example.mazdacompanionapp.Sender.BluetoothSender
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
 
@@ -29,7 +30,10 @@ class MainActivity : ComponentActivity() {
         android.Manifest.permission.BLUETOOTH_CONNECT,
         android.Manifest.permission.BLUETOOTH_SCAN,
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
-        android.Manifest.permission.ACCESS_FINE_LOCATION
+        android.Manifest.permission.ACCESS_FINE_LOCATION,
+        android.Manifest.permission.ACCESS_NETWORK_STATE,
+        android.Manifest.permission.ACCESS_WIFI_STATE,
+        android.Manifest.permission.READ_PHONE_STATE
     )
 
 
@@ -39,59 +43,41 @@ class MainActivity : ComponentActivity() {
         checkAndRequestPermissions()
     }
 
+
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkAndRequestPermissions() {
         val permissionsToRequest = permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
         if (permissionsToRequest.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toTypedArray(),
-                REQUEST_CODE
-            )
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), REQUEST_CODE)
         } else {
-            checkAllPermissionsGranted()
+            checkNotificationPermission()
         }
     }
 
-    private fun checkAllPermissionsGranted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
-                Toast.makeText(
-                    this,
-                    "Please grant notification access and restart App",
-                    Toast.LENGTH_LONG
-                ).show()
-                val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-                startActivity(intent)
-            } else {
-                onPermissionsGranted()
-            }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            checkNotificationPermission()
+        }
+    }
+
+    private fun checkNotificationPermission() {
+        if (!isNotificationServiceEnabled()) {
+            Toast.makeText(this, "Please grant notification access", Toast.LENGTH_LONG).show()
+            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
         } else {
             onPermissionsGranted()
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE) {
-            val deniedPermissions =
-                grantResults.indices.filter { grantResults[it] != PackageManager.PERMISSION_GRANTED }
-                    .map { permissions[it] }
-
-            if (deniedPermissions.isEmpty()) {
-                checkAllPermissionsGranted()
-            } else {
-                onPermissionsDenied(deniedPermissions)
-            }
-        }
+    private fun isNotificationServiceEnabled(): Boolean {
+        val cn = ComponentName(this, NotificationListener::class.java)
+        val flat = Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
+        return flat != null && flat.contains(cn.flattenToString())
     }
+
 
     private fun onPermissionsGranted() {
         val app = application as CompanionApplication
@@ -124,11 +110,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//    private fun sendNotificationData() {
-//        val json = NotificationListener.notificationsToJson()
-//        bluetoothService.sendData(json)
-//    }
-//
 
 
 

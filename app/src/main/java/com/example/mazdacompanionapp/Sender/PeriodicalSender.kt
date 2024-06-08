@@ -46,14 +46,14 @@ class PeriodicalSender(
                         }
                         val notifications = NotificationListener.notificationsLiveData.value
                         val notificationsJson = JSONArray()
-                        if (notifications != null) {
-                            for (event in entry.events) {
-                                if (event.isEnabled) {
-                                    val toHanldle =
-                                        event.selectedApps.find { it.name == "PhoneInfo" }
-                                    if (toHanldle != null) {
-                                        notificationsJson.put(HandleSpecial(toHanldle))
-                                    }
+                        for (event in entry.events) {
+                            if (event.isEnabled) {
+                                val toHanldle =
+                                    event.selectedApps.find { it.name == "PhoneInfo" }
+                                if (toHanldle != null) {
+                                    notificationsJson.put(HandleSpecial(toHanldle))
+                                }
+                                if (notifications != null) {
                                     for (notificationData in notifications) {
 
                                         if (event.selectedApps.find { appInfo -> appInfo.name == notificationData.appName } != null && event.isEnabled) {

@@ -24,6 +24,7 @@ class PhoneInfoManager(private val context: Context) : ViewModel() {
     init {
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         telephonyManager.listen(object : PhoneStateListener() {
+            @Deprecated("Deprecated in Java")
             override fun onSignalStrengthsChanged(signalStrength: SignalStrength?) {
                 super.onSignalStrengthsChanged(signalStrength)
                 cellularSignalStrength = signalStrength?.level

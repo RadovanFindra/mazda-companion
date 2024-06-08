@@ -30,7 +30,7 @@ class BluetoothSender(
                 eventsRepository.getAllEventsStream()
             ) { deviceItems, events ->
                 Pair(deviceItems, events)
-            }.collect { (deviceItems, events) ->
+            }.collect { (deviceItems) ->
                 _devices.value = deviceItems
                 startSending()
             }
