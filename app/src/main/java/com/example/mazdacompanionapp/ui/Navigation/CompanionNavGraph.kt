@@ -11,16 +11,18 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemAddScreen
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemAddScreenDestination
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemEditScreenDestination
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemsScreen
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemsScreenDestination
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.EditBluetoothItem
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.AddNewEventScreen
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.EditEvent
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.EventAddDestination
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.EventEditScreenDestination
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreen
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreenDestination
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemAddScreen
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemAddScreenDestination
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemEditScreenDestination
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemsScreen
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemsScreenDestination
+import com.example.mazdacompanionapp.ui.screens.devices.EditBluetoothItem
 
 
 @Composable
@@ -39,7 +41,8 @@ fun EventNavHost(
             composable(MainEventScreenDestination.route) {
                 MainEventScreen(
                     navController = navController,
-                    navigateToEventAdd = { navController.navigate(EventAddDestination.route) }
+                    navigateToEventAdd = { navController.navigate(EventAddDestination.route) },
+                    navigateToEventEdit = { navController.navigate("${EventEditScreenDestination.route}/$it") }
                 )
             }
             composable(EventAddDestination.route) {
@@ -47,6 +50,16 @@ fun EventNavHost(
                     navigateBack = { navController.popBackStack() },
                     onNavigateUp = { navController.navigateUp() }
                 )
+            }
+            composable(
+                route = EventEditScreenDestination.routeWithArgs,
+                arguments = listOf(navArgument(
+                    EventEditScreenDestination.eventIdArg
+                ) {
+                    type = NavType.IntType
+                })
+            ){
+                EditEvent(navigateBack = {navController.popBackStack()}, onNavigateUp ={ navController.navigateUp()})
             }
             composable(DeviceItemsScreenDestination.route) {
                 DeviceItemsScreen(

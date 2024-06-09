@@ -10,6 +10,7 @@ class CompanionApplication : Application() {
     lateinit var bluetoothService: BluetoothService
     lateinit var bluetoothManager: MyBluetoothManager
     lateinit var phoneInfoManager: PhoneInfoManager
+    lateinit var installedAppsGetter: InstalledAppsGetter
 
     override fun onCreate() {
         super.onCreate()
@@ -18,7 +19,7 @@ class CompanionApplication : Application() {
         bluetoothManager = MyBluetoothManager(this, bluetoothService)
         bluetoothManager.initialize()
         phoneInfoManager = PhoneInfoManager(this)
-
+        installedAppsGetter = InstalledAppsGetter(this)
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.ui.screens.Bluetooth
+package com.example.mazdacompanionapp.ui.screens.devices
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,12 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.mazdacompanionapp.AppViewModelProvider
-import com.example.mazdacompanionapp.ui.Navigation.NavigationDestination
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemsViewModel
+import com.example.mazdacompanionapp.ui.Navigation.NavigationDestination
 import com.example.mazdacompanionapp.ui.screens.DrawerContent
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ConfirmDeleteDialog
+import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemsViewModel
 import kotlinx.coroutines.launch
 
 object DeviceItemsScreenDestination : NavigationDestination {
@@ -146,7 +146,7 @@ fun DeviceItemsBody(
             DeviceItemsList(
                 deviceItemsList = deviceItemsList,
                 onItemSwitch = onDevicetSwitch,
-                onItemClick = onDevicetClick,
+                onItemEdit = onDevicetClick,
                 onItemDelete = onDeviceDelete,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
@@ -157,7 +157,7 @@ fun DeviceItemsBody(
 @Composable
 fun DeviceItemsList(
     deviceItemsList: List<DeviceItem>,
-    onItemClick: (Int) -> Unit,
+    onItemEdit: (Int) -> Unit,
     onItemSwitch: (Int) -> Unit,
     onItemDelete: (Int) -> Unit,
     modifier: Modifier
@@ -165,7 +165,7 @@ fun DeviceItemsList(
     LazyColumn(modifier = modifier) {
         items(deviceItemsList) { item ->
             BluetoothItem(item = item,
-                onItemClick = { onItemClick(item.id) },
+                onItemEdit = { onItemEdit(item.id) },
                 onItemSwitch = { onItemSwitch(item.id) },
                 onItemDelete = { onItemDelete(item.id) })
         }
@@ -175,7 +175,7 @@ fun DeviceItemsList(
 @Composable
 fun BluetoothItem(
     item: DeviceItem,
-    onItemClick: () -> Unit,
+    onItemEdit: () -> Unit,
     onItemSwitch: () -> Unit,
     onItemDelete: () -> Unit
 ) {
@@ -211,7 +211,7 @@ fun BluetoothItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = { onItemClick() }
+                    onClick = { onItemEdit() }
                 ) {
                     Icon(
                         Icons.Default.Edit, contentDescription = "Edit",

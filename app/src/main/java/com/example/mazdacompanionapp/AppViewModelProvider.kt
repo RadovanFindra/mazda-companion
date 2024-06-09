@@ -5,24 +5,33 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemAddViewModel
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemEditViewModel
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemsViewModel
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventAddViewModel
+import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.EventEditViewModel
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.MainViewModel
+import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemAddViewModel
+import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemEditViewModel
+import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemsViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             EventAddViewModel(
                 companionApplication().container.eventsRepository,
-                this.companionApplication()
+                companionApplication().installedAppsGetter
             )
         }
         initializer {
             MainViewModel(
                 companionApplication().container.eventsRepository,
                 companionApplication().container.deviceItemsRepository
+            )
+        }
+        initializer {
+            EventEditViewModel(
+                this.createSavedStateHandle(),
+                companionApplication().container.deviceItemsRepository,
+                companionApplication().container.eventsRepository,
+                companionApplication().installedAppsGetter
             )
         }
         initializer {
@@ -40,7 +49,7 @@ object AppViewModelProvider {
             DeviceItemEditViewModel(
                 this.createSavedStateHandle(),
                 companionApplication().container.deviceItemsRepository,
-                companionApplication().container.eventsRepository
+                companionApplication().container.eventsRepository,
             )
         }
     }

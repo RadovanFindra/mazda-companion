@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
         android.Manifest.permission.ACCESS_FINE_LOCATION,
         android.Manifest.permission.ACCESS_NETWORK_STATE,
         android.Manifest.permission.ACCESS_WIFI_STATE,
-        android.Manifest.permission.READ_PHONE_STATE
     )
 
 
@@ -65,7 +64,7 @@ class MainActivity : ComponentActivity() {
 
     private fun checkNotificationPermission() {
         if (!isNotificationServiceEnabled()) {
-            Toast.makeText(this, "Please grant notification access", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please grant notification access and restart App", Toast.LENGTH_LONG).show()
             startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
         } else {
             onPermissionsGranted()
@@ -102,7 +101,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onPermissionsDenied(deniedPermissions: List<String>) {
-        // Handle denied permissions here
+        Toast.makeText(this, "You Need to grand Permisions to continue!", Toast.LENGTH_LONG).show()
+
     }
 
     companion object {

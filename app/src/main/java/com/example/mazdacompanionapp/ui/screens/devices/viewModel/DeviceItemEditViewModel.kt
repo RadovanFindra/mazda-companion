@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel
+package com.example.mazdacompanionapp.ui.screens.devices.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,7 @@ import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemEditScreenDestination
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemEditScreenDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

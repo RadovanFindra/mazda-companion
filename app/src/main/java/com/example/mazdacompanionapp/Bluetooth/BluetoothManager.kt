@@ -11,7 +11,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.compose.runtime.mutableStateListOf
 import androidx.core.app.ActivityCompat
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.BluetoothDeviceItem
+import com.example.mazdacompanionapp.ui.screens.devices.viewModel.BluetoothDeviceItem
 import org.json.JSONObject
 
 class MyBluetoothManager(

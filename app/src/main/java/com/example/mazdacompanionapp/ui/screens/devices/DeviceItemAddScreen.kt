@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.ui.screens.Bluetooth
+package com.example.mazdacompanionapp.ui.screens.devices
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +27,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mazdacompanionapp.AppViewModelProvider
 import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.ui.Navigation.NavigationDestination
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.BluetoothDeviceItem
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel.DeviceItemAddViewModel
+import com.example.mazdacompanionapp.ui.screens.devices.viewModel.BluetoothDeviceItem
+import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemAddViewModel
 import kotlinx.coroutines.launch
 
 object DeviceItemAddScreenDestination : NavigationDestination {

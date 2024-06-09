@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.ui.screens.Bluetooth.viewModel
+package com.example.mazdacompanionapp.ui.screens.devices.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

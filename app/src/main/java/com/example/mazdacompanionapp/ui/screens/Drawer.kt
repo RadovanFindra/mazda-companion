@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.mazdacompanionapp.ui.screens.Bluetooth.DeviceItemsScreenDestination
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemsScreenDestination
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreenDestination
 
 @Composable

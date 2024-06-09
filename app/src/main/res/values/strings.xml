@@ -9,4 +9,5 @@
     <string name="deviceItems_add_title">Add Bluetooth Device</string>
     <string name="deviceItems_edit_title">Edit Bluetooth Device</string>
     <string name="empty_device_list">No devices \n</string>
+    <string name="event_edit_title">Edit Event</string>
 </resources>

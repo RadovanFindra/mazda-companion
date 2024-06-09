@@ -17,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -62,6 +63,7 @@ object MainEventScreenDestination : NavigationDestination {
 fun MainEventScreen(
     navController: NavHostController,
     navigateToEventAdd: () -> Unit,
+    navigateToEventEdit: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -90,11 +92,16 @@ fun MainEventScreen(
             topBar = {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor =  colorScheme.tertiaryContainer,
-                        titleContentColor =  colorScheme.onTertiaryContainer,
+                        containerColor = colorScheme.tertiaryContainer,
+                        titleContentColor = colorScheme.onTertiaryContainer,
                     ),
 
-                    title = { Text(stringResource(id = R.string.event_main_title), color =  colorScheme.onTertiaryContainer) },
+                    title = {
+                        Text(
+                            stringResource(id = R.string.event_main_title),
+                            color = colorScheme.onTertiaryContainer
+                        )
+                    },
                     navigationIcon = {
                         IconButton(onClick = {
                             coroutineScope.launch {
@@ -107,7 +114,8 @@ fun MainEventScreen(
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = navigateToEventAdd,
+                FloatingActionButton(
+                    onClick = navigateToEventAdd,
                     backgroundColor = colorScheme.tertiaryContainer,
                     contentColor = colorScheme.onTertiaryContainer
                 ) {
@@ -123,6 +131,7 @@ fun MainEventScreen(
                 MainBody(
                     eventList = mainUiState.eventList,
                     onEventCheck = { viewModel.changeEnableState(it) },
+                    onEventEdit =  { navigateToEventEdit(it) },
                     onEventDelete = { viewModel.deleteEvent(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -135,6 +144,7 @@ fun MainEventScreen(
 private fun MainBody(
     eventList: List<Event>,
     onEventCheck: (Int) -> Unit,
+    onEventEdit: (Int) -> Unit,
     onEventDelete: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -154,6 +164,7 @@ private fun MainBody(
             EventList(
                 eventList = eventList,
                 onEventCheck = onEventCheck,
+                onEventEdit = { onEventEdit(it) },
                 onEventDelete = onEventDelete,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
@@ -165,6 +176,7 @@ private fun MainBody(
 fun EventList(
     eventList: List<Event>,
     onEventCheck: (Int) -> Unit,
+    onEventEdit: (Int) -> Unit,
     onEventDelete: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -173,6 +185,7 @@ fun EventList(
             EventItem(
                 event = event,
                 onCheck = { onEventCheck(event.id) },
+                onEventEdit = { onEventEdit(event.id) },
                 onDeleteClick = { onEventDelete(event.id) }
             )
         }
@@ -182,6 +195,7 @@ fun EventList(
 @Composable
 fun EventItem(
     event: Event,
+    onEventEdit: () -> Unit,
     onDeleteClick: () -> Unit,
     onCheck: () -> Unit
 ) {
@@ -200,18 +214,36 @@ fun EventItem(
         )
     }
 
-    Column(modifier = Modifier
-        .padding(16.dp)
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(text = event.name, style = MaterialTheme.typography.h6, color = colorScheme.onSurface)
-                Text(text = event.preset.name, style = MaterialTheme.typography.body2, color = colorScheme.onSurface)
+                Text(
+                    text = event.name,
+                    style = MaterialTheme.typography.h6,
+                    color = colorScheme.onSurface
+                )
+                Text(
+                    text = event.preset.name,
+                    style = MaterialTheme.typography.body2,
+                    color = colorScheme.onSurface
+                )
             }
             Row {
+                IconButton(
+                    onClick = { onEventEdit() }
+                ) {
+                    Icon(
+                        Icons.Default.Edit, contentDescription = "Edit",
+                        tint = colorScheme.onSurface
+                    )
+
+                }
                 Switch(
                     checked = event.isEnabled,
                     onCheckedChange = { onCheck() }
@@ -219,9 +251,11 @@ fun EventItem(
                 IconButton(
                     onClick = { showDialog = true }
                 ) {
-                    Icon(Icons.Default.Delete,
+                    Icon(
+                        Icons.Default.Delete,
                         contentDescription = "Delete Event",
-                        tint = colorScheme.onSurface)
+                        tint = colorScheme.onSurface
+                    )
                 }
             }
         }
@@ -238,16 +272,20 @@ fun ConfirmDeleteDialog(
         onDismissRequest = onDismiss,
         title = { Text(message, color = colorScheme.onSecondaryContainer) },
         containerColor = colorScheme.secondaryContainer,
-        text = { Text("Are you sure you want to delete?", color = colorScheme.onSecondaryContainer) },
+        text = {
+            Text(
+                "Are you sure you want to delete?",
+                color = colorScheme.onSecondaryContainer
+            )
+        },
 
         confirmButton = {
             Button(onClick = onConfirm) {
                 Text("Delete")
             }
         },
-
         dismissButton = {
-            OutlinedButton(onClick = onDismiss,) {
+            OutlinedButton(onClick = onDismiss) {
                 Text("Cancel", color = colorScheme.onSecondaryContainer)
             }
         }

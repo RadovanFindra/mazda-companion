@@ -1,14 +1,8 @@
 package com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel
 
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
-import com.example.mazdacompanionapp.R
+import com.example.mazdacompanionapp.InstalledAppsGetter
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
@@ -18,12 +12,12 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class EventAddViewModel(
     private val eventsRepository: EventsRepository,
-    context: Context
+    installedAppsGetter: InstalledAppsGetter
 ) : ViewModel() {
 
 
     private val _eventUiState =
-        MutableStateFlow(EventUiState(installedApps = getInstalledApps(context)))
+        MutableStateFlow(EventUiState(installedApps = installedAppsGetter.getInstalledApps()))
     val eventUiState: StateFlow<EventUiState> = _eventUiState.asStateFlow()
 
     fun updateUiState(eventDetails: EventDetails) {
@@ -45,32 +39,6 @@ class EventAddViewModel(
         }
     }
 
-    fun getInstalledApps(context: Context): List<AppInfo> {
-        val packageManager: PackageManager = context.packageManager
-        val mainIntent = Intent(Intent.ACTION_MAIN, null).apply {
-            addCategory(Intent.CATEGORY_LAUNCHER)
-        }
-        val resolveInfoList: List<ResolveInfo> = packageManager.queryIntentActivities(mainIntent, 0)
-
-        val appInfoList = resolveInfoList.map { resolveInfo ->
-            val appName = resolveInfo.loadLabel(packageManager).toString()
-            val appIcon = resolveInfo.loadIcon(packageManager).toBitmap()
-            AppInfo(name = appName, icon = appIcon)
-        }.toMutableList()
-
-        val phoneInfoAppName = "PhoneInfo"
-        val phoneInfoAppIcon =
-            AppCompatResources.getDrawable(context, R.drawable.ic_launcher_foreground)?.toBitmap()
-        if (phoneInfoAppIcon != null) {
-            appInfoList.add(
-                AppInfo(
-                    name = phoneInfoAppName,
-                    icon = (phoneInfoAppIcon)
-                )
-            )
-        }
-        return appInfoList.sortedBy { it.name }
-    }
 }
 
 data class EventUiState(
