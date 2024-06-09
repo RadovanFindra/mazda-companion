@@ -56,7 +56,7 @@ data class EventDetails(
     val id: Int = 0,
     val name: String = "",
     var preset: SEND_EVENT_PRESET? = null,
-    val selectedApps: List<AppInfo> = emptyList(),
+    val selectedApps: MutableList<AppInfo> = mutableListOf(),
     var isEnabled: Boolean = true
 )
 

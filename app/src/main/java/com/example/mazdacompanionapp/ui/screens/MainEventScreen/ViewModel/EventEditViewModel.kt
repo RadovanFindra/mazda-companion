@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class EventEditViewModel(
@@ -34,13 +35,55 @@ class EventEditViewModel(
                 .first()
                 .toEventDetails()
             val apps = installedAppsGetter.getInstalledApps()
-            _eventEditUiState.value = EventEditUiState(eventDetails, apps)
+            _eventEditUiState.value = EventEditUiState(eventDetails = eventDetails, apps = apps)
+        }
+    }
+
+    fun updateUiState(eventDetails: EventDetails) {
+        _eventEditUiState.value = _eventEditUiState.value.copy(
+            eventDetails = eventDetails,
+            isAddValid = validateInput(eventDetails)
+        )
+    }
+
+    suspend fun updateEvent() {
+        viewModelScope.launch {
+            if (validateInput()) {
+                eventsRepository.updateEvent(eventEditUiState.value.eventDetails.toEvent())
+            }
+
+            val event = eventsRepository.getEventStream(eventId).firstOrNull()
+            event?.let {
+                val updatedEvent = it.copy(isEnabled = it.isEnabled)
+                eventsRepository.updateEvent(updatedEvent)
+
+                // Update the event state in the devices repository
+                val devices =
+                    deviceItemsRepository.getAllDeviceItemsStream().firstOrNull() ?: emptyList()
+                val updatedDevices = devices.map { device ->
+                    val updatedEvents = device.events.map { evt ->
+                        if (evt.id == updatedEvent.id) updatedEvent else evt
+                    }
+                    device.copy(events = updatedEvents.toMutableList())
+                }
+                updatedDevices.forEach { device ->
+                    deviceItemsRepository.updateDeviceItem(device)
+                }
+            }
+        }
+    }
+
+
+    private fun validateInput(uiState: EventDetails = eventEditUiState.value.eventDetails): Boolean {
+        return with(uiState) {
+            name.isNotBlank()
         }
     }
 }
 
 data class EventEditUiState(
     var eventDetails: EventDetails = EventDetails(),
+    val isAddValid: Boolean = true,
     val apps: List<AppInfo> = emptyList()
 )
 
@@ -49,5 +92,5 @@ fun Event.toEventDetails(): EventDetails = EventDetails(
     name = name,
     preset = preset,
     isEnabled = isEnabled,
-    selectedApps = selectedApps
+    selectedApps = selectedApps.toMutableList()
 )

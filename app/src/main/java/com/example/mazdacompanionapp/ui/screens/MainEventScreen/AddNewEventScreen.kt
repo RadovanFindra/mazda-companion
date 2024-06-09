@@ -264,7 +264,7 @@ fun AddForm(
                                     } else {
                                         eventDetails.selectedApps - app
                                     }
-                                    onEventValueChange(eventDetails.copy(selectedApps = updatedApps))
+                                    onEventValueChange(eventDetails.copy(selectedApps = updatedApps.toMutableList()))
                                 })
                         }
                     }
