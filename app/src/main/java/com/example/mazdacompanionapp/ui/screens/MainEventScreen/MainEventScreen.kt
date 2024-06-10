@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -21,12 +23,14 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
@@ -131,7 +135,7 @@ fun MainEventScreen(
                 MainBody(
                     eventList = mainUiState.eventList,
                     onEventCheck = { viewModel.changeEnableState(it) },
-                    onEventEdit =  { navigateToEventEdit(it) },
+                    onEventEdit = { navigateToEventEdit(it) },
                     onEventDelete = { viewModel.deleteEvent(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -213,49 +217,69 @@ fun EventItem(
             "Delete Event?"
         )
     }
-
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(8.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        OutlinedCard(
+            shape = RoundedCornerShape(8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = colorScheme.surfaceVariant,
+                contentColor = colorScheme.onSurfaceVariant,
+            ),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Column {
-                Text(
-                    text = event.name,
-                    style = MaterialTheme.typography.h6,
-                    color = colorScheme.onSurface
-                )
-                Text(
-                    text = event.preset.name,
-                    style = MaterialTheme.typography.body2,
-                    color = colorScheme.onSurface
-                )
-            }
-            Row {
-                IconButton(
-                    onClick = { onEventEdit() }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                 ) {
-                    Icon(
-                        Icons.Default.Edit, contentDescription = "Edit",
-                        tint = colorScheme.onSurface
+                    Text(
+                        text = event.name,
+                        style = MaterialTheme.typography.h6,
+                        color = colorScheme.onSurface
                     )
-
+                    Text(
+                        text = event.preset.name,
+                        style = MaterialTheme.typography.body2,
+                        color = colorScheme.onSurface
+                    )
                 }
-                Switch(
-                    checked = event.isEnabled,
-                    onCheckedChange = { onCheck() }
-                )
-                IconButton(
-                    onClick = { showDialog = true }
+
+                Row(
+                    modifier = Modifier.padding(0.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        Icons.Default.Delete,
-                        contentDescription = "Delete Event",
-                        tint = colorScheme.onSurface
+                    IconButton(
+                        onClick = { onEventEdit() }
+                    ) {
+                        Icon(
+                            Icons.Default.Edit, contentDescription = "Edit",
+                            tint = colorScheme.onSurface
+                        )
+                    }
+                    Switch(
+                        checked = event.isEnabled,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = colorScheme.tertiary,
+                            uncheckedThumbColor = colorScheme.onSecondaryContainer,
+                            uncheckedTrackColor = colorScheme.surface,
+                        ),
+                        onCheckedChange = { onCheck() }
                     )
+                    IconButton(
+                        onClick = { showDialog = true }
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete Event",
+                            tint = colorScheme.onSurface
+                        )
+                    }
                 }
             }
         }

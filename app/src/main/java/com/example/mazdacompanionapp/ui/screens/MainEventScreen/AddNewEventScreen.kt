@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
@@ -146,14 +147,14 @@ fun AddEventBody(
                 onClick = onSaveClick,
                 enabled = eventUiState.isAddValid,
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = colorScheme.surfaceTint,
+                    containerColor = colorScheme.tertiary,
                     contentColor = colorScheme.onSurface,
                     disabledContainerColor = colorScheme.surface,
                 ),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (eventUiState.isAddValid) {
-                    Text(text = "Save Event")
+                    Text(text = "Save Event", color = colorScheme.onTertiary)
                 } else {
                     Text(text = "Save Event", color = colorScheme.onSurface)
                 }
@@ -183,8 +184,8 @@ fun AddForm(
             onValueChange = { onEventValueChange(eventDetails.copy(name = it)) },
             label = { Text(text = "Name*", color = colorScheme.onSurface) },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = colorScheme.secondaryContainer,
-                unfocusedContainerColor = colorScheme.secondaryContainer,
+                focusedContainerColor = colorScheme.onTertiary,
+                unfocusedContainerColor = colorScheme.tertiaryContainer
             ),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -200,12 +201,12 @@ fun AddForm(
                 OutlinedButton(
                     onClick = { expandedPresets = true },
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = colorScheme.surfaceTint,
-                        contentColor = colorScheme.onSurface,
+                        containerColor = colorScheme.tertiary,
+                        contentColor = colorScheme.onTertiary,
                         disabledContainerColor = colorScheme.surface,
                     ),
                 ) {
-                    Text(text = eventDetails.preset?.title ?: "Select Preset")
+                    Text(text = eventDetails.preset?.title ?: "Select Preset", color = colorScheme.onTertiary)
                 }
                 DropdownMenu(
                     expanded = expandedPresets,
@@ -230,12 +231,12 @@ fun AddForm(
                 OutlinedButton(
                     onClick = { expandedApps = true },
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = colorScheme.surfaceTint,
-                        contentColor = colorScheme.onSurface,
+                        containerColor = colorScheme.tertiary,
+                        contentColor = colorScheme.onTertiary,
                         disabledContainerColor = colorScheme.surface,
                     ),
                 ) {
-                    Text(text = "Select Apps")
+                    Text(text = "Select Apps", color = colorScheme.onTertiary)
                 }
                 DropdownMenu(
                     expanded = expandedApps,
@@ -243,11 +244,15 @@ fun AddForm(
                     modifier = Modifier
                         .height(600.dp)
                         .width(
-                            installedApps.maxBy { app -> app.name.length.dp }.name.length.dp
-                                .times(
-                                    11
-                                )
-                                .plus(50.dp)
+                            if (installedApps.isNotEmpty()) {
+                                installedApps.maxBy { app -> app.name.length }.name.length.dp
+                                    .times(
+                                        11
+                                    )
+                                    .plus(50.dp)
+                            } else {
+                                200.dp
+                            }
                         )
 
                 ) {
@@ -298,7 +303,11 @@ fun App(
         },
 
         trailingContent = {
-            Checkbox(checked = contains, onCheckedChange = { onCheckedChange(it) })
+            Checkbox(checked = contains, onCheckedChange = { onCheckedChange(it) },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = colorScheme.tertiary,
+                    uncheckedColor = colorScheme.onSecondaryContainer
+                ))
         }
     )
 }

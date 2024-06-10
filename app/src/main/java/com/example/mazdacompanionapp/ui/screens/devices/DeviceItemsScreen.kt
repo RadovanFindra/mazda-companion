@@ -8,22 +8,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
@@ -191,51 +195,69 @@ fun BluetoothItem(
         )
     }
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(8.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        OutlinedCard(
+            shape = RoundedCornerShape(8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = colorScheme.surfaceVariant,
+                contentColor = colorScheme.onSurfaceVariant,
+            ),
+            modifier = Modifier.padding(0.dp)
         ) {
-            item.name?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.h6,
-                    color = colorScheme.onSurface,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-            }
             Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(
-                    onClick = { onItemEdit() }
-                ) {
-                    Icon(
-                        Icons.Default.Edit, contentDescription = "Edit",
-                        tint = colorScheme.onSurface
+                item.name?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.h6,
+                        color = colorScheme.onSurface,
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(8.dp)
                     )
-
                 }
-                Switch(
-                    checked = item.isEnabled,
-                    onCheckedChange = { onItemSwitch() },
-                    modifier = Modifier.align(Alignment.CenterVertically)  // Align Switch vertically centered
-                )
-                IconButton(
-                    onClick = { showDialog = true },
-                    modifier = Modifier.align(Alignment.CenterVertically)  // Align IconButton vertically centered
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        Icons.Default.Delete,
-                        contentDescription = "Delete Device",
-                        tint = colorScheme.onSurface
+                    IconButton(
+                        onClick = { onItemEdit() }
+                    ) {
+                        Icon(
+                            Icons.Default.Edit, contentDescription = "Edit",
+                            tint = colorScheme.onSurface
+                        )
+
+                    }
+                    Switch(
+                        checked = item.isEnabled,
+                        onCheckedChange = { onItemSwitch() },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = colorScheme.tertiary,
+                            uncheckedThumbColor = colorScheme.onSecondaryContainer,
+                            uncheckedTrackColor = colorScheme.surface,
+                        ),
+                        modifier = Modifier.align(Alignment.CenterVertically)
                     )
+                    IconButton(
+                        onClick = { showDialog = true },
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete Device",
+                            tint = colorScheme.onSurface
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 

@@ -39,13 +39,14 @@ class PeriodicalSender(
     override fun Send() {
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
+                val notificationsJson = JSONArray()
                 for (entry in enties) {
                     if (entry.isEnabled) {
                         if (!bluetoothManager.isDeviceConnected(entry.address)) {
                             bluetoothManager.connectToDevice(entry.address)
                         }
                         val notifications = NotificationListener.notificationsLiveData.value
-                        val notificationsJson = JSONArray()
+
                         for (event in entry.events) {
                             if (event.isEnabled) {
                                 val toHanldle =
@@ -68,14 +69,14 @@ class PeriodicalSender(
 
                                 }
                             }
-                            val sendJson: JSONObject =
-                                JSONObject().apply { put("notifications", notificationsJson) }
-                            bluetoothManager.sendData(entry.address, sendJson)
-                        }
 
+                        }
+                        val sendJson: JSONObject =
+                            JSONObject().apply { put("notifications", notificationsJson) }
+                        bluetoothManager.sendData(entry.address, sendJson)
                     }
-                    delay(600)
                 }
+                delay(1500)
             }
         }
     }

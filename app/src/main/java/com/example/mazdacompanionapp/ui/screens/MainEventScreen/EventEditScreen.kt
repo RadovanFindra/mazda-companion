@@ -86,6 +86,7 @@ fun EditEvent(
                     IconButton(onClick = navigateBack) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
+
                             contentDescription = stringResource(R.string.back_button)
                         )
                     }
@@ -141,14 +142,14 @@ fun EditEventBody(
                 onClick = onSaveClick,
                 enabled = eventUiState.isAddValid,
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = colorScheme.surfaceTint,
+                    containerColor = colorScheme.tertiary,
                     contentColor = colorScheme.onSurface,
                     disabledContainerColor = colorScheme.surface,
                 ),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (eventUiState.isAddValid) {
-                    Text(text = "Save Event")
+                    Text(text = "Save Event", color = colorScheme.onTertiary)
                 } else {
                     Text(text = "Save Event", color = colorScheme.onSurface)
                 }
@@ -178,8 +179,8 @@ fun EditForm(
             onValueChange = { onEventValueChange(eventDetails.copy(name = it)) },
             label = { Text(text = "Name*", color = colorScheme.onSurface) },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = colorScheme.secondaryContainer,
-                unfocusedContainerColor = colorScheme.secondaryContainer,
+                focusedContainerColor = colorScheme.onTertiary,
+                unfocusedContainerColor = colorScheme.tertiaryContainer
             ),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -194,8 +195,8 @@ fun EditForm(
                 OutlinedButton(
                     onClick = { expandedPresets = true },
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = colorScheme.surfaceTint,
-                        contentColor = colorScheme.onSurface,
+                        containerColor = colorScheme.tertiary,
+                        contentColor = colorScheme.onTertiary,
                         disabledContainerColor = colorScheme.surface,
                     ),
                 ) {
@@ -224,12 +225,12 @@ fun EditForm(
                 OutlinedButton(
                     onClick = { expandedApps = true },
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = colorScheme.surfaceTint,
-                        contentColor = colorScheme.onSurface,
+                        containerColor = colorScheme.tertiary,
+                        contentColor = colorScheme.onTertiary,
                         disabledContainerColor = colorScheme.surface,
                     ),
                 ) {
-                    Text(text = "Select Apps")
+                    Text(text = "Select Apps", color = colorScheme.onTertiary)
                 }
                 DropdownMenu(
                     expanded = expandedApps,
