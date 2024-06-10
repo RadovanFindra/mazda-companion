@@ -37,6 +37,16 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".ui.widget.CompanionWidgedReciever"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/my_app_widget_info" />
+        </receiver>
+
         <service
             android:name=".Notification.NotificationListener"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
@@ -46,6 +56,7 @@
             </intent-filter>
         </service>
     </application>
+
     <queries>
         <intent>
             <action android:name="android.intent.action.SEND" />

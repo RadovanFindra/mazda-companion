@@ -68,9 +68,7 @@ fun DeviceItemAddScreen(
 
     Scaffold(
         topBar = {
-            Column(
-
-            ) {
+            Column {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = colorScheme.tertiaryContainer,

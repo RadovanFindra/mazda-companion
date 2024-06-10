@@ -112,7 +112,7 @@ fun MainEventScreen(
                                 drawerState.open()
                             }
                         }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
+                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = colorScheme.onSurface)
                         }
                     }
                 )

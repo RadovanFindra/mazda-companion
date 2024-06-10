@@ -33,6 +33,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
     }
 
     kotlinOptions {
@@ -76,6 +77,7 @@ dependencies {
 
     implementation(libs.androidbrowserhelper)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.work.runtime.ktx)
 
     // Test dependencies
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -94,6 +96,15 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     implementation(libs.androidx.ui.text.google.fonts)
     implementation("androidx.core:core-ktx:1.12.0")
+
+    // For AppWidgets support
+    implementation( "androidx.glance:glance-appwidget:1.0.0" )
+
+    // For interop APIs with Material 2
+    implementation( "androidx.glance:glance-material:1.0.0" )
+
+    // For interop APIs with Material 3
+    implementation( "androidx.glance:glance-material3:1.0.0" )
 
     // Testing dependencies
     testImplementation(libs.junit)
