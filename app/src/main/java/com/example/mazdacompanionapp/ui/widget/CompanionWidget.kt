@@ -31,17 +31,15 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.mazdacompanionapp.data.AppDataContainer
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
-import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
 
 class CompanionWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val appContainer = AppDataContainer(context.applicationContext)
-        val devicesRepository = appContainer.deviceItemsRepository
+
 
         provideContent {
             WidgetBody(
-                deviceItemsRepository = devicesRepository,
+                context = context,
                 onDeviceSwitch = { deviceId -> changeEnableState(context, deviceId) }
             )
         }
@@ -58,10 +56,12 @@ class CompanionWidget : GlanceAppWidget() {
 
 @Composable
 fun WidgetBody(
-    deviceItemsRepository: DeviceItemsRepository,
+    context: Context,
     onDeviceSwitch: (Int) -> Unit,
 ) {
-    val deviceItemsFlow by rememberUpdatedState(newValue = deviceItemsRepository.getAllDeviceItemsStream())
+    val appContainer = AppDataContainer(context.applicationContext)
+    val devicesRepository = appContainer.deviceItemsRepository
+    val deviceItemsFlow by rememberUpdatedState(newValue = devicesRepository.getAllDeviceItemsStream())
 
     val deviceItemsList by deviceItemsFlow.collectAsState(initial = emptyList())
 
