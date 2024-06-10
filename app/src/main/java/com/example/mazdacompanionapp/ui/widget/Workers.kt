@@ -8,28 +8,6 @@ import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.firstOrNull
 
-class FetchDeviceItemsWorker(
-    context: Context,
-    workerParams: WorkerParameters
-) : CoroutineWorker(context, workerParams) {
-
-    override suspend fun doWork(): Result {
-        val appContainer = AppDataContainer(applicationContext)
-        val devicesRepository = appContainer.deviceItemsRepository
-
-        val deviceItems = devicesRepository.getAllDeviceItemsStream().firstOrNull() ?: emptyList()
-        saveDeviceItemsToPreferences(deviceItems)
-        return Result.success()
-    }
-
-    private fun saveDeviceItemsToPreferences(deviceItems: List<DeviceItem>) {
-        val sharedPreferences = applicationContext.getSharedPreferences("widget_prefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val deviceItemsJson = Gson().toJson(deviceItems)
-        editor.putString("device_items", deviceItemsJson)
-        editor.apply()
-    }
-}
 
 class ChangeDeviceStateWorker(
     context: Context,
