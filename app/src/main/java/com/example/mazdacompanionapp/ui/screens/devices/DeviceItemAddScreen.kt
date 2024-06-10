@@ -19,6 +19,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -53,6 +54,7 @@ fun DeviceItemAddScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val discoveredDevices = viewModel.bluetoothManager.discoveredDevices
+    val isDiscovering = viewModel.bluetoothManager.discovering()
 
     LaunchedEffect(Unit) {
         viewModel.bluetoothManager.startDiscovery()
@@ -66,34 +68,47 @@ fun DeviceItemAddScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = colorScheme.tertiaryContainer,
-                    titleContentColor = colorScheme.onTertiaryContainer,
-                ),
-                title = {
-                    Text(
-                        stringResource(id = R.string.deviceItems_add_title),
-                        color = colorScheme.onTertiaryContainer
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateUp) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back_button)
+            Column(
+
+            ) {
+                CenterAlignedTopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = colorScheme.tertiaryContainer,
+                        titleContentColor = colorScheme.onTertiaryContainer,
+                    ),
+                    title = {
+                        Text(
+                            stringResource(id = R.string.deviceItems_add_title),
+                            color = colorScheme.onTertiaryContainer
                         )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onNavigateUp) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.back_button)
+                            )
+                        }
+
                     }
 
+                )
+                if (isDiscovering) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = colorScheme.primary
+                    )
                 }
-            )
+            }
         }
-    ) { innerPadding ->
+    ){ innerPadding ->
+
         Column(
             modifier = Modifier
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+
             DeviceList(
                 onDeviceSelected = {
                     coroutineScope.launch {

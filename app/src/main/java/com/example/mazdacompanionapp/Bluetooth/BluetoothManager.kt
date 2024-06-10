@@ -22,6 +22,8 @@ class MyBluetoothManager(
     private val _discoveredDevices = mutableStateListOf<BluetoothDeviceItem>()
     val discoveredDevices: List<BluetoothDeviceItem> get() = _discoveredDevices
 
+    private var isDiscovering: Boolean = false
+
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
         (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
     }
@@ -38,6 +40,9 @@ class MyBluetoothManager(
     fun unregisterReceiver() {
         context.unregisterReceiver(receiver)
     }
+    fun discovering():Boolean{
+        return isDiscovering
+    }
 
     fun startDiscovery() {
         if (ActivityCompat.checkSelfPermission(
@@ -46,6 +51,7 @@ class MyBluetoothManager(
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             bluetoothAdapter?.startDiscovery()
+            isDiscovering = true
         }
     }
 
@@ -56,6 +62,7 @@ class MyBluetoothManager(
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             bluetoothAdapter?.cancelDiscovery()
+            isDiscovering = false
             _discoveredDevices.clear()
         }
     }
@@ -72,7 +79,7 @@ class MyBluetoothManager(
         bluetoothService.sendDataToDevice(deviceAddress, data)
     }
     fun isDeviceConnected(deviceAddress: String): Boolean {
-    return bluetoothService.isDeviceConnected(deviceAddress)
+        return bluetoothService.isDeviceConnected(deviceAddress)
     }
 
     private val receiver = object : BroadcastReceiver() {

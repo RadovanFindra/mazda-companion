@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 
 import com.example.mazdacompanionapp.Notification.NotificationData
 import com.example.mazdacompanionapp.Notification.NotificationListener
+import com.example.mazdacompanionapp.ui.screens.devices.DeviceList
 import com.example.mazdacompanionapp.ui.screens.devices.viewModel.BluetoothDeviceItem
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -48,14 +49,6 @@ fun MainScreen(
     }
 }
 
-@Composable
-fun DeviceList(onDeviceSelected: (BluetoothDeviceItem) -> Unit, discoveredDevices: List<BluetoothDeviceItem>) {
-    LazyColumn {
-        items(discoveredDevices) { device ->
-            DeviceItem(device = device, onClick = { onDeviceSelected(device) })
-        }
-    }
-}
 
 @Composable
 fun DeviceItem(device: BluetoothDeviceItem, onClick: () -> Unit) {

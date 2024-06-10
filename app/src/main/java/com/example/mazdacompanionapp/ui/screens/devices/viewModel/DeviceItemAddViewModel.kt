@@ -17,7 +17,6 @@ class DeviceItemAddViewModel(
     suspend fun saveDevice(bluetoothDeviceItem: BluetoothDeviceItem) {
         if (validateInput(bluetoothDeviceItem)) {
             deviceItemsRepository.insertDeviceItem(bluetoothDeviceItem.toDeviceItem())
-            bluetoothManager.cancelDiscovery()
         }
     }
 

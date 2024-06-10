@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -127,7 +128,7 @@ fun EditBluetoothItemBody(
         OutlinedButton(
             onClick = onSaveClick,
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = colorScheme.surfaceTint,
+                containerColor = colorScheme.tertiary,
                 contentColor = colorScheme.onSurface,
                 disabledContainerColor = colorScheme.surface,
             ),
@@ -155,8 +156,8 @@ fun DeviceEditForm(
                 onValueChange = { onDeviceChange(deviceDetails.copy(name = it)) },
                 label = { Text(text = "Name", color = colorScheme.onSurface) },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = colorScheme.secondaryContainer,
-                    unfocusedContainerColor = colorScheme.secondaryContainer,
+                    focusedContainerColor = colorScheme.onTertiary,
+                    unfocusedContainerColor = colorScheme.tertiaryContainer
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
@@ -167,8 +168,9 @@ fun DeviceEditForm(
             onValueChange = { },
             label = { Text(text = "Address", color = colorScheme.onSurface) },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = colorScheme.secondaryContainer,
-                unfocusedContainerColor = colorScheme.secondaryContainer,
+                focusedContainerColor = colorScheme.onTertiary,
+                unfocusedContainerColor = colorScheme.tertiaryContainer,
+                disabledContainerColor = colorScheme.onTertiary
             ),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -224,7 +226,11 @@ fun EventItemAssign(
         trailingContent = {
             Checkbox(
                 checked = contains,
-                onCheckedChange = { onCheckedChange(it) }
+                onCheckedChange = { onCheckedChange(it) },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = colorScheme.tertiary,
+                    uncheckedColor = colorScheme.onSecondaryContainer
+                )
             )
         }
     )
