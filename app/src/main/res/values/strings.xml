@@ -10,4 +10,26 @@
     <string name="deviceItems_edit_title">Edit Bluetooth Device</string>
     <string name="empty_device_list">No devices \n</string>
     <string name="event_edit_title">Edit Event</string>
+    <string name="unknown_device">Unknown Device</string>
+    <string name="save_device">Save Device</string>
+    <string name="menu_description">Menu</string>
+    <string name="add_description">Add</string>
+    <string name="delete_device_message">Delete Device?</string>
+    <string name="edit_description">Edit</string>
+    <string name="delete_device_description">Delete Device</string>
+    <string name="save_event">Save Event</string>
+    <string name="name_not_optional">Name*</string>
+    <string name="select_preset">Select Preset</string>
+    <string name="select_apps">Select Apps</string>
+    <string name="delete_event_message">Delete Event?</string>
+    <string name="delete_event_description">Delete Event</string>
+    <string name="delete_message">Are you sure you want to delete?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="navigation_title">Navigation</string>
+    <string name="evets">Events</string>
+    <string name="bluetooht">Bluetooth</string>
+    <string name="phone_info_name">PhoneInfo</string>
+    <string name="notification_permision_req">Please grant notification access and restart App</string>
+    <string name="permisions_not_grandet">You Need to grand all Permisions to continue!</string>
 </resources>

@@ -22,7 +22,7 @@ class InstalledAppsGetter(private val context: Context) {
             AppInfo(name = appName, icon = appIcon)
         }.toMutableList()
 
-        val phoneInfoAppName = "PhoneInfo"
+        val phoneInfoAppName = context.getString(R.string.phone_info_name)
         val phoneInfoAppIcon =
             AppCompatResources.getDrawable(context, R.drawable.ic_launcher_foreground)?.toBitmap()
         if (phoneInfoAppIcon != null) {

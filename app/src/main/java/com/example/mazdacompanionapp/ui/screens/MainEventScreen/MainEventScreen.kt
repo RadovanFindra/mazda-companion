@@ -112,7 +112,7 @@ fun MainEventScreen(
                                 drawerState.open()
                             }
                         }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = colorScheme.onSurface)
+                            Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.menu_description), tint = colorScheme.onSurface)
                         }
                     }
                 )
@@ -123,7 +123,7 @@ fun MainEventScreen(
                     backgroundColor = colorScheme.tertiaryContainer,
                     contentColor = colorScheme.onTertiaryContainer
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
+                    Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_description))
                 }
             }
         ) { innerPadding ->
@@ -214,7 +214,7 @@ fun EventItem(
             onDismiss = {
                 showDialog = false
             },
-            "Delete Event?"
+            stringResource(R.string.delete_event_message)
         )
     }
     Column(
@@ -258,7 +258,7 @@ fun EventItem(
                         onClick = { onEventEdit() }
                     ) {
                         Icon(
-                            Icons.Default.Edit, contentDescription = "Edit",
+                            Icons.Default.Edit, contentDescription = stringResource(R.string.edit_description),
                             tint = colorScheme.onSurface
                         )
                     }
@@ -276,7 +276,7 @@ fun EventItem(
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete Event",
+                            contentDescription = stringResource(R.string.delete_event_description),
                             tint = colorScheme.onSurface
                         )
                     }
@@ -298,19 +298,19 @@ fun ConfirmDeleteDialog(
         containerColor = colorScheme.secondaryContainer,
         text = {
             Text(
-                "Are you sure you want to delete?",
+                stringResource(R.string.delete_message),
                 color = colorScheme.onSecondaryContainer
             )
         },
 
         confirmButton = {
             Button(onClick = onConfirm) {
-                Text("Delete")
+                Text(stringResource(R.string.delete))
             }
         },
         dismissButton = {
             OutlinedButton(onClick = onDismiss) {
-                Text("Cancel", color = colorScheme.onSecondaryContainer)
+                Text(stringResource(R.string.cancel), color = colorScheme.onSecondaryContainer)
             }
         }
     )

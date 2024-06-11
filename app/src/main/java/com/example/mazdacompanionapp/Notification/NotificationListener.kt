@@ -24,7 +24,7 @@ class NotificationListener : NotificationListenerService() {
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
-        // Handle disconnection if necessary
+        notificationsLiveData.postValue(emptyList())
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {

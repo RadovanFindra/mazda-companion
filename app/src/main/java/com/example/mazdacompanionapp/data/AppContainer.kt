@@ -18,16 +18,18 @@ interface AppContainer {
 }
 
 /**
- * [AppContainer] implementation that provides instance of [OfflineItemsRepository]
+ * [AppContainer] implementation that provides instance of [OfflineEventsRepository] and [OfflineDeviceItemsRepository]
  */
 class AppDataContainer(private val context: Context) : AppContainer {
     /**
-     * Implementation for [ItemsRepository]
+     * Implementation for [EventsRepository]
      */
     override val eventsRepository: EventsRepository by lazy {
         OfflineEventsRepository(EventsDatabase.getDatabase(context).eventDao())
     }
-
+    /**
+     * Implementation for [DeviceItemsRepository]
+     */
     override val deviceItemsRepository: DeviceItemsRepository by lazy {
         OfflineDeviceItemsRepository(DeviceItemsDatabase.getDatabase(context).deviceItemDao())
     }

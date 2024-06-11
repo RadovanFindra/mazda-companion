@@ -134,7 +134,7 @@ fun EditBluetoothItemBody(
             ),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Save Device")
+            Text(text = stringResource(R.string.save_device))
         }
     }
 }

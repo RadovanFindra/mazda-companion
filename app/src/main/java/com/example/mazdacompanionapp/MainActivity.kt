@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
         checkAndRequestPermissions()
     }
 
-
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkAndRequestPermissions() {
         val permissionsToRequest = permissions.filter {
@@ -58,13 +57,21 @@ class MainActivity : ComponentActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE) {
-            checkNotificationPermission()
+            val deniedPermissions = permissions.zip(grantResults.toTypedArray())
+                .filter { it.second != PackageManager.PERMISSION_GRANTED }
+                .map { it.first }
+
+            if (deniedPermissions.isNotEmpty() || isNotificationServiceEnabled()) {
+                onPermissionsDenied(deniedPermissions)
+            } else {
+                checkNotificationPermission()
+            }
         }
     }
 
     private fun checkNotificationPermission() {
         if (!isNotificationServiceEnabled()) {
-            Toast.makeText(this, "Please grant notification access and restart App", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, this.getString(R.string.notification_permision_req), Toast.LENGTH_LONG).show()
             startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
         } else {
             onPermissionsGranted()
@@ -77,6 +84,9 @@ class MainActivity : ComponentActivity() {
         return flat != null && flat.contains(cn.flattenToString())
     }
 
+    private fun onPermissionsDenied(deniedPermissions: List<String>) {
+        Toast.makeText(this, this.getString(R.string.permisions_not_grandet), Toast.LENGTH_LONG).show()
+    }
 
     private fun onPermissionsGranted() {
         val app = application as CompanionApplication
@@ -86,7 +96,6 @@ class MainActivity : ComponentActivity() {
             app.phoneInfoManager,
             app.bluetoothManager
         )
-
 
         setContent {
             MazdaCompanionAppTheme {
@@ -100,10 +109,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun onPermissionsDenied(deniedPermissions: List<String>) {
-        Toast.makeText(this, "You Need to grand Permisions to continue!", Toast.LENGTH_LONG).show()
 
-    }
 
     companion object {
         private const val REQUEST_CODE = 523

@@ -159,7 +159,7 @@ fun DeviceItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = device.name ?: "Unknown Device",
+                    text = device.name ?: stringResource(id = R.string.unknown_device),
                     style = MaterialTheme.typography.h6,
                     color = colorScheme.onSurface,
                     modifier = Modifier.padding(8.dp)

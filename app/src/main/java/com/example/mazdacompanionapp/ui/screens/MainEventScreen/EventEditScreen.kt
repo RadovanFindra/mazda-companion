@@ -149,9 +149,9 @@ fun EditEventBody(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (eventUiState.isAddValid) {
-                    Text(text = "Save Event", color = colorScheme.onTertiary)
+                    Text(text = stringResource(R.string.save_event), color = colorScheme.onTertiary)
                 } else {
-                    Text(text = "Save Event", color = colorScheme.onSurface)
+                    Text(text = stringResource(R.string.save_event), color = colorScheme.onSurface)
                 }
             }
         }
@@ -177,7 +177,7 @@ fun EditForm(
         OutlinedTextField(
             value = eventDetails.name,
             onValueChange = { onEventValueChange(eventDetails.copy(name = it)) },
-            label = { Text(text = "Name*", color = colorScheme.onSurface) },
+            label = { Text(text = stringResource(R.string.name_not_optional), color = colorScheme.onSurface) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = colorScheme.onTertiary,
                 unfocusedContainerColor = colorScheme.tertiaryContainer
@@ -200,7 +200,7 @@ fun EditForm(
                         disabledContainerColor = colorScheme.surface,
                     ),
                 ) {
-                    Text(text = eventDetails.preset?.title ?: "Select Preset")
+                    Text(text = eventDetails.preset?.title ?: stringResource(R.string.select_preset))
                 }
                 DropdownMenu(
                     expanded = expandedPresets,
@@ -230,7 +230,7 @@ fun EditForm(
                         disabledContainerColor = colorScheme.surface,
                     ),
                 ) {
-                    Text(text = "Select Apps", color = colorScheme.onTertiary)
+                    Text(text = stringResource(R.string.select_apps), color = colorScheme.onTertiary)
                 }
                 DropdownMenu(
                     expanded = expandedApps,

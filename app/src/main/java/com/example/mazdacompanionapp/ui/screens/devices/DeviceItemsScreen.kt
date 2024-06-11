@@ -97,7 +97,7 @@ fun DeviceItemsScreen(
                         drawerState.open()
                     }
                 }) {
-                    Icon(Icons.Default.Menu, contentDescription = "Menu", tint = colorScheme.onSurface)
+                    Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.menu_description), tint = colorScheme.onSurface)
                 }
             })
         }, floatingActionButton = {
@@ -106,7 +106,7 @@ fun DeviceItemsScreen(
                 backgroundColor = colorScheme.tertiaryContainer,
                 contentColor = colorScheme.onTertiaryContainer
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_description))
             }
         }) { innerPadding ->
             Column(
@@ -191,7 +191,7 @@ fun BluetoothItem(
             showDialog = false
         }, onDismiss = {
             showDialog = false
-        }, "Delete Device?"
+        }, stringResource(R.string.delete_device_message)
         )
     }
     Column(
@@ -229,7 +229,7 @@ fun BluetoothItem(
                         onClick = { onItemEdit() }
                     ) {
                         Icon(
-                            Icons.Default.Edit, contentDescription = "Edit",
+                            Icons.Default.Edit, contentDescription = stringResource(R.string.edit_description),
                             tint = colorScheme.onSurface
                         )
 
@@ -250,7 +250,7 @@ fun BluetoothItem(
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete Device",
+                            contentDescription = stringResource(R.string.delete_device_description),
                             tint = colorScheme.onSurface
                         )
                     }

@@ -12,8 +12,10 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.MainEventScreenDestination
 import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemsScreenDestination
 
@@ -30,14 +32,14 @@ fun DrawerContent(
     ) {
 
         Text(
-            "Navigation",
+            stringResource(R.string.navigation_title),
             modifier = Modifier.padding(16.dp),
             color = colorScheme.onSecondaryContainer
         )
         Spacer(Modifier.height(12.dp))
         Divider(thickness = 3.dp)
         NavigationDrawerItem(
-            label = { Text(text = "Events", color = colorScheme.onSurface) },
+            label = { Text(text = stringResource(R.string.evets), color = colorScheme.onSurface) },
             selected = currentRoute == MainEventScreenDestination.route,
             onClick = { onDestinationClicked(MainEventScreenDestination.route) },
             colors = NavigationDrawerItemDefaults.colors(
@@ -50,7 +52,7 @@ fun DrawerContent(
         )
         Spacer(modifier = Modifier.padding(vertical = 3.dp))
         NavigationDrawerItem(
-            label = { Text(text = "Bluetooth", color = colorScheme.onSurface) },
+            label = { Text(text = stringResource(R.string.bluetooht), color = colorScheme.onSurface) },
             selected = currentRoute == DeviceItemsScreenDestination.route,
             onClick = { onDestinationClicked(DeviceItemsScreenDestination.route) },
             colors = NavigationDrawerItemDefaults.colors(
