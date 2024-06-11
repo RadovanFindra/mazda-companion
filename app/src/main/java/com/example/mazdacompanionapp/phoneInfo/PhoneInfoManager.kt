@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.phoneInfo
 
 import android.content.Context
 import android.content.Intent
@@ -16,7 +16,9 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+/**
+ *Manager for Phone infor
+ */
 class PhoneInfoManager(private val context: Context) : ViewModel() {
 
     private var cellularSignalStrength: Int? = null

@@ -2,14 +2,16 @@ package com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
-import com.example.mazdacompanionapp.InstalledAppsGetter
+import com.example.mazdacompanionapp.getters.InstalledAppsGetter
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.SEND_EVENT_PRESET
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
+/**
+ *ViewModel for Add Event
+ */
 class EventAddViewModel(
     private val eventsRepository: EventsRepository,
     installedAppsGetter: InstalledAppsGetter

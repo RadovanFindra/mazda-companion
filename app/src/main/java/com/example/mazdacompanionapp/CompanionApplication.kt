@@ -1,10 +1,15 @@
 package com.example.mazdacompanionapp
 
 import android.app.Application
-import com.example.mazdacompanionapp.Bluetooth.BluetoothService
-import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
+import com.example.mazdacompanionapp.bluetooth.BluetoothService
+import com.example.mazdacompanionapp.bluetooth.MyBluetoothManager
 import com.example.mazdacompanionapp.data.AppDataContainer
+import com.example.mazdacompanionapp.getters.InstalledAppsGetter
+import com.example.mazdacompanionapp.phoneInfo.PhoneInfoManager
 
+/**
+ *Application instances
+ */
 class CompanionApplication : Application() {
     lateinit var container: AppDataContainer
     lateinit var bluetoothService: BluetoothService

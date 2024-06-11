@@ -1,7 +1,7 @@
-package com.example.mazdacompanionapp.Sender
+package com.example.mazdacompanionapp.sender
 
-import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
-import com.example.mazdacompanionapp.PhoneInfoManager
+import com.example.mazdacompanionapp.bluetooth.MyBluetoothManager
+import com.example.mazdacompanionapp.phoneInfo.PhoneInfoManager
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-
+/**
+ * Create Sender based on Presets
+ */
 class BluetoothSender(
     private val deviceItemsRepository: DeviceItemsRepository,
     eventsRepository: EventsRepository,

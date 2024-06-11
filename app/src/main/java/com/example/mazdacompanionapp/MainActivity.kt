@@ -16,11 +16,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.mazdacompanionapp.Notification.NotificationListener
-import com.example.mazdacompanionapp.Sender.BluetoothSender
+import com.example.mazdacompanionapp.notification.NotificationListener
+import com.example.mazdacompanionapp.sender.BluetoothSender
 import com.example.mazdacompanionapp.ui.theme.MazdaCompanionAppTheme
 
-
+/**
+ *  Main input pint of Application
+ */
 class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)

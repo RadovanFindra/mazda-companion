@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp
+package com.example.mazdacompanionapp.getters
 
 import android.content.Context
 import android.content.Intent
@@ -6,8 +6,11 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
+import com.example.mazdacompanionapp.R
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.AppInfo
-
+/**
+ *Provider of installed applications
+ */
 class InstalledAppsGetter(private val context: Context) {
     fun getInstalledApps(): List<AppInfo> {
         val packageManager: PackageManager = context.packageManager

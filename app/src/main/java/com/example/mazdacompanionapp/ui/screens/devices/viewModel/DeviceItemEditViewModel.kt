@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-
+/**
+ *ViewModel for Edit Device
+ */
 class DeviceItemEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val deviceItemsRepository: DeviceItemsRepository,

@@ -31,7 +31,9 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.mazdacompanionapp.data.AppDataContainer
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
-
+/**
+ *Widget
+ */
 class CompanionWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {

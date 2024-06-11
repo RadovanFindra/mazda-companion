@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.Bluetooth
+package com.example.mazdacompanionapp.bluetooth
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -13,7 +13,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.core.app.ActivityCompat
 import com.example.mazdacompanionapp.ui.screens.devices.viewModel.BluetoothDeviceItem
 import org.json.JSONObject
-
+/**
+ * Manager for Bluetooth Adapter
+ */
 class MyBluetoothManager(
     private val context: Context,
     private val bluetoothService: BluetoothService

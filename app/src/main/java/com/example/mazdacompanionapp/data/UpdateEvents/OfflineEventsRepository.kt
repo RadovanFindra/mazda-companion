@@ -3,6 +3,9 @@ package com.example.mazdacompanionapp.data.UpdateEvents
 
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Database instance(Offline databese)
+ */
 class OfflineEventsRepository(private val eventDao: EventDao) : EventsRepository {
     override fun getAllEventsStream(): Flow<List<Event>> = eventDao.getAllEvents()
 

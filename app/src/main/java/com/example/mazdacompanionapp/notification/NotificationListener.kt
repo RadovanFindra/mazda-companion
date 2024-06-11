@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.Notification
+package com.example.mazdacompanionapp.notification
 
 import android.app.Notification
 import android.content.pm.PackageManager
@@ -7,14 +7,18 @@ import android.service.notification.StatusBarNotification
 import androidx.lifecycle.MutableLiveData
 import org.json.JSONArray
 import org.json.JSONObject
-
+/**
+ * Notidication structure
+ */
 data class NotificationData(
     val appName: String?,
     val title: String?,
     val text: String?,
     val timestamp: Long
 )
-
+/**
+ * Listener for nofitications
+ */
 class NotificationListener : NotificationListenerService() {
 
     override fun onListenerConnected() {

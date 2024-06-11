@@ -11,7 +11,9 @@ import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.MainVi
 import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemAddViewModel
 import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemEditViewModel
 import com.example.mazdacompanionapp.ui.screens.devices.viewModel.DeviceItemsViewModel
-
+/**
+ *Provider for View models
+ */
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {

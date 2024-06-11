@@ -8,7 +8,9 @@ import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.firstOrNull
 
-
+/**
+ *Worker for database update
+ */
 class ChangeDeviceStateWorker(
     context: Context,
     workerParams: WorkerParameters

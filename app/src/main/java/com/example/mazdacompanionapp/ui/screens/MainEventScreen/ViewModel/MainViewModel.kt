@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
+/**
+ *ViewModel for Maint screen (Event screen)
+ */
 class MainViewModel(
     private val eventsRepository: EventsRepository,
     private val devicesRepository: DeviceItemsRepository

@@ -2,7 +2,9 @@
 package com.example.mazdacompanionapp.data.BluetoothDevices
 
 import kotlinx.coroutines.flow.Flow
-
+/**
+ * Database instance(Offline databese)
+ */
 class OfflineDeviceItemsRepository(private val deviceItemDao: DeviceItemDao) : DeviceItemsRepository {
     override fun getAllDeviceItemsStream(): Flow<List<DeviceItem>> = deviceItemDao.getAllDeviceItems()
 

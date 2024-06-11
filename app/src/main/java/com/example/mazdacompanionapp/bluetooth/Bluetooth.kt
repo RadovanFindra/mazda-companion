@@ -1,4 +1,4 @@
-package com.example.mazdacompanionapp.Bluetooth
+package com.example.mazdacompanionapp.bluetooth
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -12,7 +12,9 @@ import java.io.OutputStream
 import java.util.UUID
 
 
-
+/**
+ * Bluetooth Interface for Stream comunication
+ */
 class BluetoothService(
     private val context: Context,
 ) {

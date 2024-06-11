@@ -1,8 +1,8 @@
-package com.example.mazdacompanionapp.Sender
+package com.example.mazdacompanionapp.sender
 
-import com.example.mazdacompanionapp.Bluetooth.MyBluetoothManager
-import com.example.mazdacompanionapp.Notification.NotificationListener
-import com.example.mazdacompanionapp.PhoneInfoManager
+import com.example.mazdacompanionapp.bluetooth.MyBluetoothManager
+import com.example.mazdacompanionapp.notification.NotificationListener
+import com.example.mazdacompanionapp.phoneInfo.PhoneInfoManager
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 import com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel.AppInfo
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +12,9 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CopyOnWriteArrayList
-
+/**
+ * Sender for periodical messages
+ */
 class PeriodicalSender(
     private val bluetoothManager: MyBluetoothManager,
     private val phoneInfoManager: PhoneInfoManager

@@ -22,7 +22,9 @@ import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemsScreen
 import com.example.mazdacompanionapp.ui.screens.devices.DeviceItemsScreenDestination
 import com.example.mazdacompanionapp.ui.screens.devices.EditBluetoothItem
 
-
+/**
+ *Navigation for app
+ */
 @Composable
 fun CompanionNavHost(
     navController: NavHostController,

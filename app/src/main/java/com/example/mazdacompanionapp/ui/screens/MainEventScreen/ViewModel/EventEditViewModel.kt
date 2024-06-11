@@ -3,7 +3,7 @@ package com.example.mazdacompanionapp.ui.screens.MainEventScreen.ViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mazdacompanionapp.InstalledAppsGetter
+import com.example.mazdacompanionapp.getters.InstalledAppsGetter
 import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItemsRepository
 import com.example.mazdacompanionapp.data.UpdateEvents.Event
 import com.example.mazdacompanionapp.data.UpdateEvents.EventsRepository
@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-
+/**
+ *ViewModel for add Event
+ */
 class EventEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val deviceItemsRepository: DeviceItemsRepository,
