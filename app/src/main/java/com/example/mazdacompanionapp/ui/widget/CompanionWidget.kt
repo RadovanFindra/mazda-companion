@@ -35,8 +35,6 @@ import com.example.mazdacompanionapp.data.BluetoothDevices.DeviceItem
 class CompanionWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-
-
         provideContent {
             WidgetBody(
                 context = context,

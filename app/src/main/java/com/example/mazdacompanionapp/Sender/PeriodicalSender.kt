@@ -76,7 +76,7 @@ class PeriodicalSender(
                         bluetoothManager.sendData(entry.address, sendJson)
                     }
                 }
-                delay(1500)
+                delay(30000) //1000 - 1sek, 60000 - 1min
             }
         }
     }

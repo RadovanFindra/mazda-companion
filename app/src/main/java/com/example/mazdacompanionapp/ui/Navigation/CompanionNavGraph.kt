@@ -2,8 +2,6 @@ package com.example.mazdacompanionapp.ui.Navigation
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -26,67 +24,66 @@ import com.example.mazdacompanionapp.ui.screens.devices.EditBluetoothItem
 
 
 @Composable
-fun EventNavHost(
+fun CompanionNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-    ) { innerPadding ->
-        NavHost(
-            navController,
-            startDestination = MainEventScreenDestination.route,
-            modifier = modifier.padding(innerPadding),
-            enterTransition = { fadeIn(animationSpec = tween(300)) }
-        ) {
-            composable(MainEventScreenDestination.route) {
-                MainEventScreen(
-                    navController = navController,
-                    navigateToEventAdd = { navController.navigate(EventAddDestination.route) },
-                    navigateToEventEdit = { navController.navigate("${EventEditScreenDestination.route}/$it") }
-                )
-            }
-            composable(EventAddDestination.route) {
-                AddNewEventScreen(
-                    navigateBack = { navController.popBackStack() },
-                    onNavigateUp = { navController.navigateUp() }
-                )
-            }
-            composable(
-                route = EventEditScreenDestination.routeWithArgs,
-                arguments = listOf(navArgument(
-                    EventEditScreenDestination.eventIdArg
-                ) {
-                    type = NavType.IntType
-                })
-            ){
-                EditEvent(navigateBack = {navController.popBackStack()}, onNavigateUp ={ navController.navigateUp()})
-            }
-            composable(DeviceItemsScreenDestination.route) {
-                DeviceItemsScreen(
-                    navController,
-                    navigateToDeviceAdd = { navController.navigate(DeviceItemAddScreenDestination.route) },
-                    navigateToDeviceEdit = { navController.navigate("${DeviceItemEditScreenDestination.route}/$it") }
-                )
-            }
-            composable(DeviceItemAddScreenDestination.route) {
-                DeviceItemAddScreen(
-                    navigateBack = { navController.popBackStack() },
-                    onNavigateUp = { navController.navigateUp() }
-                )
-            }
-            composable(
-                route = DeviceItemEditScreenDestination.routeWithArgs,
-                arguments = listOf(navArgument(
-                    DeviceItemEditScreenDestination.deviceIdArg
-                ) {
-                    type = NavType.IntType
-                })
+    NavHost(
+        navController,
+        startDestination = MainEventScreenDestination.route,
+        modifier = modifier,
+        enterTransition = { fadeIn(animationSpec = tween(300)) }
+    ) {
+        composable(MainEventScreenDestination.route) {
+            MainEventScreen(
+                navController = navController,
+                navigateToEventAdd = { navController.navigate(EventAddDestination.route) },
+                navigateToEventEdit = { navController.navigate("${EventEditScreenDestination.route}/$it") }
+            )
+        }
+        composable(EventAddDestination.route) {
+            AddNewEventScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+        composable(
+            route = EventEditScreenDestination.routeWithArgs,
+            arguments = listOf(navArgument(
+                EventEditScreenDestination.eventIdArg
             ) {
-                EditBluetoothItem(
-                    navigateBack = { navController.popBackStack() },
-                    onNavigateUp = { navController.navigateUp() }
-                )
-            }
+                type = NavType.IntType
+            })
+        ) {
+            EditEvent(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() })
+        }
+        composable(DeviceItemsScreenDestination.route) {
+            DeviceItemsScreen(
+                navController,
+                navigateToDeviceAdd = { navController.navigate(DeviceItemAddScreenDestination.route) },
+                navigateToDeviceEdit = { navController.navigate("${DeviceItemEditScreenDestination.route}/$it") }
+            )
+        }
+        composable(DeviceItemAddScreenDestination.route) {
+            DeviceItemAddScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+        composable(
+            route = DeviceItemEditScreenDestination.routeWithArgs,
+            arguments = listOf(navArgument(
+                DeviceItemEditScreenDestination.deviceIdArg
+            ) {
+                type = NavType.IntType
+            })
+        ) {
+            EditBluetoothItem(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+            )
         }
     }
 }
